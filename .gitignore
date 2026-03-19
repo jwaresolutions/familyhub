@@ -1,0 +1,25 @@
+node_modules/
+dist/
+.next/
+.env
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+
+# Postgres data
+postgres-data/
+pgdata/
+
+# OMC state
+.omc/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

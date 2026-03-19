@@ -1,0 +1,51 @@
+services:
+  init:
+    image: alpine:3.19
+    volumes:
+      - ./scripts:/scripts
+      - .:/workspace
+    entrypoint: /scripts/generate-env.sh
+    working_dir: /workspace
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    depends_on:
+      init:
+        condition: service_completed_successfully
+    env_file: .env
+    environment:
+      POSTGRES_DB: organize
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-changeme}@db:5432/organize
+      JWT_SECRET: ${JWT_SECRET:-dev-secret}
+      OBA_API_KEY: ${OBA_API_KEY:-TEST}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3001
+    ports:
+      - "3001:3001"
+
+volumes:
+  pgdata:

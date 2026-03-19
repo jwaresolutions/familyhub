@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  color     String
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  taskAssignments TaskAssignment[]
+  calendarEvents  CalendarEvent[]
+  shoppingChecks  ShoppingCheck[]
+  savedStops      SavedStop[]
+}
+
+model Task {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  status      String       @default("BACKLOG")
+  priority    String       @default("MEDIUM")
+  category    String
+  position    Int
+  dueDate     DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  assignments  TaskAssignment[]
+  calendarLink CalendarEvent? @relation("TaskEvent")
+
+  @@index([status, position])
+  @@index([category])
+  @@index([dueDate])
+}
+
+model TaskAssignment {
+  id     String @id @default(cuid())
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@unique([taskId, userId])
+}
+
+model CalendarEvent {
+  id             String    @id @default(cuid())
+  title          String
+  description    String?
+  startTime      DateTime
+  endTime        DateTime
+  allDay         Boolean   @default(false)
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  taskId         String?   @unique
+  task           Task?     @relation("TaskEvent", fields: [taskId], references: [id])
+  recurrenceRule String?
+  recurrenceEnd  DateTime?
+  parentEventId  String?
+  parentEvent    CalendarEvent?  @relation("RecurrenceExceptions", fields: [parentEventId], references: [id])
+  exceptions     CalendarEvent[] @relation("RecurrenceExceptions")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([startTime, endTime])
+  @@index([userId])
+}
+
+model ShoppingList {
+  id        String         @id @default(cuid())
+  name      String
+  archived  Boolean        @default(false)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  items     ShoppingItem[]
+
+  @@index([archived])
+}
+
+model Store {
+  id         String        @id @default(cuid())
+  name       String        @unique
+  itemStores ItemStore[]
+  prices     PriceRecord[]
+}
+
+model Product {
+  id     String         @id @default(cuid())
+  name   String         @unique
+  items  ShoppingItem[]
+  prices PriceRecord[]
+}
+
+model ShoppingItem {
+  id             String       @id @default(cuid())
+  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
+  shoppingListId String
+  product        Product      @relation(fields: [productId], references: [id])
+  productId      String
+  quantity       Int          @default(1)
+  unit           String?
+  notes          String?
+  checked        Boolean      @default(false)
+  position       Int
+  itemStores     ItemStore[]
+  checks         ShoppingCheck[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([shoppingListId, checked, position])
+}
+
+model ItemStore {
+  id             String       @id @default(cuid())
+  shoppingItem   ShoppingItem @relation(fields: [shoppingItemId], references: [id], onDelete: Cascade)
+  shoppingItemId String
+  store          Store        @relation(fields: [storeId], references: [id])
+  storeId        String
+
+  @@unique([shoppingItemId, storeId])
+}
+
+model PriceRecord {
+  id        String   @id @default(cuid())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  store     Store    @relation(fields: [storeId], references: [id])
+  storeId   String
+  price     Decimal  @db.Decimal(10, 2)
+  date      DateTime @default(now())
+
+  @@index([productId, storeId, date])
+}
+
+model ShoppingCheck {
+  id             String       @id @default(cuid())
+  shoppingItem   ShoppingItem @relation(fields: [shoppingItemId], references: [id], onDelete: Cascade)
+  shoppingItemId String
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  price          Decimal?     @db.Decimal(10, 2)
+  storeId        String?
+  checkedAt      DateTime     @default(now())
+}
+
+model SavedStop {
+  id       String @id @default(cuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  stopId   String
+  stopName String
+  routeIds String
+  nickname String?
+  position Int
+
+  @@index([userId, position])
+}
