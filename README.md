@@ -57,9 +57,61 @@ organize/
 - **PWA** — Installable on phones/tablets, dark mode, offline-aware
 - **Extensible** — Module registry pattern, add new features without touching core code
 
-## Production Deployment
+## NAS Deployment (Docker Compose)
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for full NAS + Cloudflare setup guide.
+Copy the following into your NAS Docker manager. Before deploying, replace the placeholder values for `DB_PASSWORD`, `JWT_SECRET`, `OBA_API_KEY`, and `TUNNEL_TOKEN` with your real credentials.
+
+The Cloudflare tunnel should be configured to route `api-familyhub.jware.dev` to `http://api:3001`.
+
+The frontend is deployed separately to Cloudflare Pages at `familyhub.jware.dev`.
+
+```yaml
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: organize
+      POSTGRES_USER: organize
+      POSTGRES_PASSWORD: CHANGE_ME_DB_PASSWORD
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U organize"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    image: ghcr.io/jwaresolutions/familyhub:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://organize:CHANGE_ME_DB_PASSWORD@db:5432/organize
+      JWT_SECRET: CHANGE_ME_JWT_SECRET
+      OBA_API_KEY: CHANGE_ME_OBA_API_KEY
+      CORS_ORIGIN: https://familyhub.jware.dev
+      NODE_ENV: production
+      PORT: "3001"
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    depends_on:
+      - api
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: CHANGE_ME_TUNNEL_TOKEN
+
+volumes:
+  pgdata:
+```
+
+> **Note:** Make sure the `DB_PASSWORD` in `POSTGRES_PASSWORD` and in the `DATABASE_URL` match.
+
+For the full setup walkthrough, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Environment Variables
 
