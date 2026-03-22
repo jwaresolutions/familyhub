@@ -3,6 +3,7 @@ import { transitService } from './transit.service';
 import { registerModule } from '../../lib/module-registry';
 import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
+import { requireAdmin } from '../../middleware/require-admin';
 import { createSavedStopSchema } from '@organize/shared';
 
 const router = Router();
@@ -42,7 +43,7 @@ router.patch('/stops/:id', async (req: AuthRequest, res: Response, next: NextFun
 });
 
 // DELETE /transit/stops/:id — remove saved stop
-router.delete('/stops/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
+router.delete('/stops/:id', requireAdmin, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     await transitService.deleteStop(req.params.id);
     res.status(204).end();

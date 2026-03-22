@@ -3,6 +3,7 @@ import { tasksService } from './tasks.service';
 import { registerModule } from '../../lib/module-registry';
 import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
+import { requireAdmin } from '../../middleware/require-admin';
 import { createTaskSchema, moveTaskSchema, reorderSchema } from '@organize/shared';
 
 const router = Router();
@@ -67,7 +68,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response, next: NextFunction)
 });
 
 // DELETE /tasks/:id
-router.delete('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
+router.delete('/:id', requireAdmin, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     await tasksService.delete(req.params.id);
     res.status(204).end();

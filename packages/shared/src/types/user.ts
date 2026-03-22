@@ -4,6 +4,7 @@ export interface User {
   name: string;
   color: string; // hex color for calendar/avatar
   avatarUrl?: string;
+  role: string; // 'admin' | 'member'
   createdAt: string;
   updatedAt: string;
 }

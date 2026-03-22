@@ -19,7 +19,7 @@ router.post('/login', validate(loginSchema), async (req, res, next) => {
     res.json({
       token,
       refreshToken,
-      user: { id: user.id, username: user.username, name: user.name, color: user.color, avatarUrl: user.avatarUrl, createdAt: user.createdAt, updatedAt: user.updatedAt },
+      user: { id: user.id, username: user.username, name: user.name, color: user.color, avatarUrl: user.avatarUrl, role: user.role, createdAt: user.createdAt, updatedAt: user.updatedAt },
     });
   } catch (err) { next(err); }
 });
@@ -41,7 +41,7 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res, next) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
-      select: { id: true, username: true, name: true, color: true, avatarUrl: true, createdAt: true, updatedAt: true },
+      select: { id: true, username: true, name: true, color: true, avatarUrl: true, role: true, createdAt: true, updatedAt: true },
     });
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);

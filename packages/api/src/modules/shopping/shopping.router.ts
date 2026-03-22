@@ -3,6 +3,7 @@ import { shoppingService } from './shopping.service';
 import { registerModule } from '../../lib/module-registry';
 import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
+import { requireAdmin } from '../../middleware/require-admin';
 import { createShoppingListSchema, createShoppingItemSchema, checkItemSchema, createStoreSchema } from '@organize/shared';
 
 const router = Router();
@@ -37,7 +38,7 @@ router.patch('/lists/:id', async (req: AuthRequest, res: Response, next: NextFun
   } catch (err) { next(err); }
 });
 
-router.delete('/lists/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
+router.delete('/lists/:id', requireAdmin, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     await shoppingService.deleteList(req.params.id);
     res.status(204).end();
@@ -67,7 +68,7 @@ router.patch('/items/:id', async (req: AuthRequest, res: Response, next: NextFun
   } catch (err) { next(err); }
 });
 
-router.delete('/items/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
+router.delete('/items/:id', requireAdmin, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     await shoppingService.deleteItem(req.params.id);
     res.status(204).end();

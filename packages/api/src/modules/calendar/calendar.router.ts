@@ -3,6 +3,7 @@ import { calendarService } from './calendar.service';
 import { registerModule } from '../../lib/module-registry';
 import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
+import { requireAdmin } from '../../middleware/require-admin';
 import { createEventSchema } from '@organize/shared';
 
 const router = Router();
@@ -45,7 +46,7 @@ router.patch('/events/:id', async (req: AuthRequest, res: Response, next: NextFu
 });
 
 // DELETE /calendar/events/:id?scope=single|future|all
-router.delete('/events/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
+router.delete('/events/:id', requireAdmin, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const scope = (req.query.scope as string) || 'all';
     await calendarService.delete(req.params.id, scope as 'single' | 'future' | 'all');
