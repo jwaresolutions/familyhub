@@ -1,0 +1,29 @@
+{
+  "id": 1,
+  "createdAt": "2026-03-20T00:36:04.160886+00:00",
+  "updatedAt": "2026-03-20T00:36:04.160886+00:00",
+  "title": "setup bus navagation",
+  "description": "setup bus navagation",
+  "status": "open",
+  "priority": "medium",
+  "projectId": null,
+  "cycle": null,
+  "labels": [],
+  "personas": [],
+  "files": [],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Dev Lead": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Security": {
+      "verdict": null,
+      "notes": ""
+    }
+  }
+}
