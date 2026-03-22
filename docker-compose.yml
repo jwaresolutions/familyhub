@@ -44,8 +44,14 @@ services:
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
       NODE_ENV: ${NODE_ENV:-production}
       PORT: 3001
-    ports:
-      - "3001:3001"
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    depends_on:
+      - api
+    command: tunnel run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN}
 
 volumes:
   pgdata:
