@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# Read auto-generated secrets if available
+# Read secrets from volume
 if [ -f /secrets/db_password ] && [ -z "$DATABASE_URL" ]; then
   DB_PASS=$(cat /secrets/db_password)
   export DATABASE_URL="postgresql://organize:${DB_PASS}@db:5432/organize"

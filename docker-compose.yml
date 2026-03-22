@@ -1,33 +1,23 @@
 services:
-  init:
-    image: alpine:3.19
-    restart: "no"
-    volumes:
-      - secrets:/secrets
-    command: >
-      sh -c '
-        if [ ! -f /secrets/db_password ]; then
-          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/db_password
-          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/jwt_secret
-          echo "Secrets generated."
-        else
-          echo "Secrets already exist, skipping."
-        fi
-      '
-
   db:
     image: postgres:16-alpine
     restart: unless-stopped
-    depends_on:
-      init:
-        condition: service_completed_successfully
+    entrypoint:
+      - sh
+      - -c
+      - |
+        if [ ! -f /secrets/db_password ]; then
+          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/db_password
+          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/jwt_secret
+        fi
+        exec docker-entrypoint.sh postgres
     environment:
       POSTGRES_DB: organize
       POSTGRES_USER: organize
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_PASSWORD_FILE: /secrets/db_password
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - secrets:/run/secrets:ro
+      - secrets:/secrets
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U organize"]
       interval: 10s
