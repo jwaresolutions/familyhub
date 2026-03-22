@@ -1,11 +1,19 @@
 services:
   init:
     image: alpine:3.19
+    restart: "no"
     volumes:
-      - ./scripts:/scripts
-      - .:/workspace
-    entrypoint: /scripts/generate-env.sh
-    working_dir: /workspace
+      - secrets:/secrets
+    command: >
+      sh -c '
+        if [ ! -f /secrets/db_password ]; then
+          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/db_password
+          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/jwt_secret
+          echo "Secrets generated."
+        else
+          echo "Secrets already exist, skipping."
+        fi
+      '
 
   db:
     image: postgres:16-alpine
@@ -13,17 +21,15 @@ services:
     depends_on:
       init:
         condition: service_completed_successfully
-    env_file: .env
     environment:
       POSTGRES_DB: organize
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_USER: organize
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
+      - secrets:/run/secrets:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U organize"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -36,14 +42,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file: .env
+    volumes:
+      - secrets:/secrets:ro
     environment:
-      DATABASE_URL: postgresql://postgres:${DB_PASSWORD:-changeme}@db:5432/organize
-      JWT_SECRET: ${JWT_SECRET:-dev-secret}
       OBA_API_KEY: ${OBA_API_KEY:-TEST}
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
       NODE_ENV: ${NODE_ENV:-production}
-      PORT: 3001
+      PORT: "3001"
+
   tunnel:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
@@ -55,3 +61,4 @@ services:
 
 volumes:
   pgdata:
+  secrets:

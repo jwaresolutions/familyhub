@@ -59,7 +59,7 @@ organize/
 
 ## NAS Deployment (Docker Compose)
 
-Copy the following into your NAS Docker manager. Before deploying, replace the placeholder values for `DB_PASSWORD`, `JWT_SECRET`, `OBA_API_KEY`, and `TUNNEL_TOKEN` with your real credentials.
+Copy the following into your NAS Docker manager. Replace `CHANGE_ME_TUNNEL_TOKEN` with your Cloudflare tunnel token. All other secrets (DB password, JWT secret) are auto-generated on first boot.
 
 The Cloudflare tunnel should be configured to route `api-familyhub.jware.dev` to `http://api:3001`.
 
@@ -67,15 +67,35 @@ The frontend is deployed separately to Cloudflare Pages at `familyhub.jware.dev`
 
 ```yaml
 services:
+  init:
+    image: alpine:3.19
+    restart: "no"
+    volumes:
+      - secrets:/secrets
+    command: >
+      sh -c '
+        if [ ! -f /secrets/db_password ]; then
+          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/db_password
+          head -c 32 /dev/urandom | base64 | tr -d "/+=" | head -c 32 > /secrets/jwt_secret
+          echo "Secrets generated."
+        else
+          echo "Secrets already exist, skipping."
+        fi
+      '
+
   db:
     image: postgres:16-alpine
     restart: unless-stopped
+    depends_on:
+      init:
+        condition: service_completed_successfully
     environment:
       POSTGRES_DB: organize
       POSTGRES_USER: organize
-      POSTGRES_PASSWORD: CHANGE_ME_DB_PASSWORD
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - secrets:/run/secrets:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U organize"]
       interval: 10s
@@ -88,10 +108,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - secrets:/secrets:ro
     environment:
-      DATABASE_URL: postgresql://organize:CHANGE_ME_DB_PASSWORD@db:5432/organize
-      JWT_SECRET: CHANGE_ME_JWT_SECRET
-      OBA_API_KEY: CHANGE_ME_OBA_API_KEY
+      OBA_API_KEY: TEST
       CORS_ORIGIN: https://familyhub.jware.dev
       NODE_ENV: production
       PORT: "3001"
@@ -107,9 +127,14 @@ services:
 
 volumes:
   pgdata:
+  secrets:
 ```
 
-> **Note:** Make sure the `DB_PASSWORD` in `POSTGRES_PASSWORD` and in the `DATABASE_URL` match.
+To view the auto-generated secrets:
+
+```bash
+docker compose exec api sh -c 'echo "DB_PASSWORD: $(cat /secrets/db_password)" && echo "JWT_SECRET: $(cat /secrets/jwt_secret)"'
+```
 
 For the full setup walkthrough, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
@@ -120,7 +145,7 @@ For the full setup walkthrough, see [DEPLOYMENT.md](DEPLOYMENT.md).
 | `DB_PASSWORD` | PostgreSQL password | `changeme` |
 | `DATABASE_URL` | Full PostgreSQL connection string | — |
 | `JWT_SECRET` | Secret for JWT signing | — |
-| `OBA_API_KEY` | OneBusAway API key | `TEST` |
+| `OBA_API_KEY` | OneBusAway API key (optional, `TEST` works for Puget Sound) | `TEST` |
 | `PORT` | API server port | `3001` |
 | `CORS_ORIGIN` | Allowed CORS origins | `*` |
 | `NEXT_PUBLIC_API_URL` | API URL for frontend | `http://localhost:3001` |
