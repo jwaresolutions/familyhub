@@ -1,6 +1,6 @@
 {
-  "name": "Organize",
-  "short_name": "Organize",
+  "name": "FamilyHub",
+  "short_name": "FamilyHub",
   "description": "Family life management",
   "start_url": "/",
   "display": "standalone",
