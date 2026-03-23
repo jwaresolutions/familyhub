@@ -25,11 +25,7 @@ app.use('/api/v1/auth', authRouter);
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
 // Version
-app.get('/api/version', (_req, res) => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { version } = require('../../package.json');
-  res.json({ version });
-});
+app.get('/api/version', (_req, res) => res.json({ version: '1.0.0' }));
 
 // Protected routes
 const protectedRouter = express.Router();
