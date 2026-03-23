@@ -8,7 +8,7 @@ import { MobileNav } from '@/components/layout/MobileNav';
 
 export const metadata: Metadata = {
   title: 'FamilyHub',
-  description: 'Family life management',
+  description: 'Family life management hub',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
