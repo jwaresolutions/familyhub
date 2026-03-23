@@ -35,4 +35,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy packages/web/out --project-name=familyhub
+          command: pages deploy packages/web/out --project-name=familyhub --commit-dirty=true
