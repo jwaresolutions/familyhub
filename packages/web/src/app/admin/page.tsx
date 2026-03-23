@@ -25,6 +25,9 @@ const COLORS = [
   { value: '#F97316', label: 'Orange' },
 ];
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const FRONTEND_VERSION = '1.0.0';
+
 export default function AdminPage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
@@ -38,6 +41,14 @@ export default function AdminPage() {
   const [formData, setFormData] = useState({ username: '', password: '', name: '', color: '#3B82F6', role: 'member' });
   const [editData, setEditData] = useState({ name: '', color: '', role: '', password: '' });
   const [error, setError] = useState('');
+  const [apiVersion, setApiVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/version`)
+      .then(r => r.json())
+      .then(d => setApiVersion(d.version))
+      .catch(() => setApiVersion('unknown'));
+  }, []);
 
   useEffect(() => {
     if (!isLoading && (!user || user.role !== 'admin')) router.push('/');
@@ -153,6 +164,10 @@ export default function AdminPage() {
           </div>
         </div>
       </Modal>
+
+      <p className="text-xs text-gray-400 text-center pt-4">
+        API v{apiVersion ?? '...'} | Frontend v{FRONTEND_VERSION}
+      </p>
     </div>
   );
 }
