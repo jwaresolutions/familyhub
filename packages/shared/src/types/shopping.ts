@@ -2,6 +2,7 @@ export interface ShoppingList {
   id: string;
   name: string;
   archived: boolean;
+  isMain: boolean;
   itemCount: number;
   checkedCount: number;
   createdAt: string;
@@ -28,6 +29,10 @@ export interface ShoppingItem {
   checked: boolean;
   position: number;
   stores: Store[];
+  approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
+  requestedBy?: { id: string; name: string } | null;
+  approvedBy?: { id: string; name: string } | null;
+  rejectionReason?: string | null;
   createdAt: string;
   updatedAt: string;
 }

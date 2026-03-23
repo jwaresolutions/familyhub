@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -30,6 +30,15 @@ export function ShoppingListView() {
   const createStore = useCreateStore();
 
   const selectedList = lists.find(l => l.id === selectedListId);
+
+  useEffect(() => {
+    if (!selectedListId && lists.length > 0) {
+      const mainList = lists.find(l => l.isMain);
+      if (mainList) setSelectedListId(mainList.id);
+    }
+  }, [lists, selectedListId]);
+
+  const sortedLists = [...lists].sort((a, b) => (b.isMain ? 1 : 0) - (a.isMain ? 1 : 0));
 
   const filteredItems = storeFilter
     ? items.filter(i => i.stores.some(s => s.id === storeFilter))
@@ -70,7 +79,7 @@ export function ShoppingListView() {
             <Button size="sm" onClick={handleCreateList}>Add</Button>
           </div>
         )}
-        {lists.map(list => (
+        {sortedLists.map(list => (
           <Card
             key={list.id}
             className={`cursor-pointer transition-colors ${
@@ -79,7 +88,10 @@ export function ShoppingListView() {
             onClick={() => setSelectedListId(list.id)}
           >
             <div className="flex items-center justify-between">
-              <span className="font-medium text-sm">{list.name}</span>
+              <span className="font-medium text-sm">
+                {list.isMain && <span className="mr-1 text-amber-500" title="Main list">★</span>}
+                {list.name}
+              </span>
               <Badge label={`${list.checkedCount}/${list.itemCount}`} color="#6B7280" />
             </div>
           </Card>
@@ -119,7 +131,9 @@ export function ShoppingListView() {
               <h2 className="text-lg font-semibold">{selectedList.name}</h2>
               <div className="flex gap-2">
                 <Button variant="ghost" size="sm" onClick={() => setShowAddItem(true)}>+ Add Item</Button>
-                <Button variant="danger" size="sm" onClick={() => { if (confirm('Delete this list and all its items?')) { deleteList.mutate(selectedListId!); setSelectedListId(null); } }}>Delete List</Button>
+                {!selectedList.isMain && (
+                  <Button variant="danger" size="sm" onClick={() => { if (confirm('Delete this list and all its items?')) { deleteList.mutate(selectedListId!); setSelectedListId(null); } }}>Delete List</Button>
+                )}
               </div>
             </div>
 

@@ -23,6 +23,8 @@ model User {
   calendarEvents  CalendarEvent[]
   shoppingChecks  ShoppingCheck[]
   savedStops      SavedStop[]
+  requestedItems  ShoppingItem[] @relation("itemRequester")
+  approvedItems   ShoppingItem[] @relation("itemApprover")
 }
 
 model Task {
@@ -82,6 +84,7 @@ model ShoppingList {
   id        String         @id @default(cuid())
   name      String
   archived  Boolean        @default(false)
+  isMain    Boolean        @default(false)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   items     ShoppingItem[]
@@ -103,21 +106,33 @@ model Product {
   prices PriceRecord[]
 }
 
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model ShoppingItem {
-  id             String       @id @default(cuid())
-  shoppingList   ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
+  id             String         @id @default(cuid())
+  shoppingList   ShoppingList   @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
   shoppingListId String
-  product        Product      @relation(fields: [productId], references: [id])
+  product        Product        @relation(fields: [productId], references: [id])
   productId      String
-  quantity       Int          @default(1)
+  quantity       Int            @default(1)
   unit           String?
   notes          String?
-  checked        Boolean      @default(false)
+  checked        Boolean        @default(false)
+  approvalStatus ApprovalStatus @default(PENDING)
+  requestedBy    User?          @relation("itemRequester", fields: [requestedById], references: [id])
+  requestedById  String?
+  approvedBy     User?          @relation("itemApprover", fields: [approvedById], references: [id])
+  approvedById   String?
+  rejectionReason String?
   position       Int
   itemStores     ItemStore[]
   checks         ShoppingCheck[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   @@index([shoppingListId, checked, position])
 }

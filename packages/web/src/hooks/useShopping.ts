@@ -89,6 +89,29 @@ export function useCheckItem() {
   });
 }
 
+export function useApproveItem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (itemId: string) => api.post(`/shopping/items/${itemId}/approve`, {}),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['shopping-items'] });
+      qc.invalidateQueries({ queryKey: ['shopping-lists'] });
+    },
+  });
+}
+
+export function useRejectItem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ itemId, reason }: { itemId: string; reason: string }) =>
+      api.post(`/shopping/items/${itemId}/reject`, { reason }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['shopping-items'] });
+      qc.invalidateQueries({ queryKey: ['shopping-lists'] });
+    },
+  });
+}
+
 export function useStores() {
   return useQuery({
     queryKey: ['stores'],

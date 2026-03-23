@@ -6,6 +6,12 @@ export const shoppingService = {
     const where: any = {};
     if (archived !== undefined) where.archived = archived;
 
+    // Auto-create main list if none exists
+    const mainList = await prisma.shoppingList.findFirst({ where: { isMain: true } });
+    if (!mainList) {
+      await prisma.shoppingList.create({ data: { name: 'Groceries', isMain: true } });
+    }
+
     const lists = await prisma.shoppingList.findMany({
       where,
       include: {
@@ -19,6 +25,7 @@ export const shoppingService = {
       id: l.id,
       name: l.name,
       archived: l.archived,
+      isMain: l.isMain,
       itemCount: l._count.items,
       checkedCount: l.items.length,
       createdAt: l.createdAt.toISOString(),
@@ -35,6 +42,10 @@ export const shoppingService = {
   },
 
   async deleteList(id: string) {
+    const list = await prisma.shoppingList.findUnique({ where: { id }, select: { isMain: true } });
+    if (list?.isMain) {
+      throw Object.assign(new Error('Cannot delete the main grocery list'), { statusCode: 400 });
+    }
     return prisma.shoppingList.delete({ where: { id } });
   },
 
@@ -45,6 +56,8 @@ export const shoppingService = {
       include: {
         product: true,
         itemStores: { include: { store: true } },
+        requestedBy: { select: { id: true, name: true } },
+        approvedBy: { select: { id: true, name: true } },
       },
       orderBy: [{ checked: 'asc' }, { position: 'asc' }],
     });
@@ -59,6 +72,10 @@ export const shoppingService = {
       checked: i.checked,
       position: i.position,
       stores: i.itemStores.map(is => is.store),
+      approvalStatus: i.approvalStatus,
+      requestedBy: i.requestedBy,
+      approvedBy: i.approvedBy,
+      rejectionReason: i.rejectionReason,
       createdAt: i.createdAt.toISOString(),
       updatedAt: i.updatedAt.toISOString(),
     }));
@@ -70,7 +87,7 @@ export const shoppingService = {
     unit?: string;
     notes?: string;
     storeIds?: string[];
-  }) {
+  }, userId: string) {
     // Find or create product
     const product = await prisma.product.upsert({
       where: { name: data.productName },
@@ -85,6 +102,10 @@ export const shoppingService = {
     });
     const position = (maxPos._max.position ?? -1) + 1;
 
+    // Check user role for auto-approval
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
+    const isAdmin = user?.role === 'admin';
+
     const item = await prisma.shoppingItem.create({
       data: {
         shoppingListId: listId,
@@ -93,6 +114,9 @@ export const shoppingService = {
         unit: data.unit,
         notes: data.notes,
         position,
+        requestedById: userId,
+        approvalStatus: isAdmin ? 'APPROVED' : 'PENDING',
+        approvedById: isAdmin ? userId : undefined,
         itemStores: data.storeIds?.length
           ? { create: data.storeIds.map(storeId => ({ storeId })) }
           : undefined,
@@ -100,6 +124,8 @@ export const shoppingService = {
       include: {
         product: true,
         itemStores: { include: { store: true } },
+        requestedBy: { select: { id: true, name: true } },
+        approvedBy: { select: { id: true, name: true } },
       },
     });
 
@@ -124,12 +150,48 @@ export const shoppingService = {
       include: {
         product: true,
         itemStores: { include: { store: true } },
+        requestedBy: { select: { id: true, name: true } },
+        approvedBy: { select: { id: true, name: true } },
       },
     });
   },
 
   async deleteItem(id: string) {
     return prisma.shoppingItem.delete({ where: { id } });
+  },
+
+  async approveItem(itemId: string, adminUserId: string) {
+    return prisma.shoppingItem.update({
+      where: { id: itemId },
+      data: {
+        approvalStatus: 'APPROVED',
+        approvedById: adminUserId,
+        rejectionReason: null,
+      },
+      include: {
+        product: true,
+        itemStores: { include: { store: true } },
+        requestedBy: { select: { id: true, name: true } },
+        approvedBy: { select: { id: true, name: true } },
+      },
+    });
+  },
+
+  async rejectItem(itemId: string, adminUserId: string, reason: string) {
+    return prisma.shoppingItem.update({
+      where: { id: itemId },
+      data: {
+        approvalStatus: 'REJECTED',
+        approvedById: adminUserId,
+        rejectionReason: reason,
+      },
+      include: {
+        product: true,
+        itemStores: { include: { store: true } },
+        requestedBy: { select: { id: true, name: true } },
+        approvedBy: { select: { id: true, name: true } },
+      },
+    });
   },
 
   async checkItem(itemId: string, userId: string, data: { price?: number; storeId?: string }) {

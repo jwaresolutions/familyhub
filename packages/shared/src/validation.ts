@@ -61,6 +61,12 @@ export const checkItemSchema = z.object({
   storeId: z.string().optional(),
 });
 
+export const approveItemSchema = z.object({});
+
+export const rejectItemSchema = z.object({
+  reason: z.string().min(1).max(200),
+});
+
 export const createStoreSchema = z.object({
   name: z.string().min(1).max(100),
 });
