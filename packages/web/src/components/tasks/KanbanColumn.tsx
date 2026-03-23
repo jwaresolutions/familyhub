@@ -26,7 +26,7 @@ export function KanbanColumn({ status, label, tasks, onTaskClick }: KanbanColumn
       <div
         ref={setNodeRef}
         className={`flex-1 rounded-lg p-2 min-h-[200px] transition-colors ${
-          isOver ? 'bg-primary-50 dark:bg-primary-900/20' : 'bg-gray-100 dark:bg-gray-800/50'
+          isOver ? 'bg-emerald-100 dark:bg-emerald-900/30' : 'bg-gray-100 dark:bg-gray-800/50'
         }`}
       >
         <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
