@@ -31,7 +31,16 @@ jobs:
           CLOUDFLARE: 1
           NEXT_PUBLIC_API_URL: https://api-familyhub.jware.dev
 
-      - uses: cloudflare/wrangler-action@v3
+      - name: Create Pages project if needed
+        uses: cloudflare/wrangler-action@v3
+        continue-on-error: true
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project create familyhub --production-branch=main
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
