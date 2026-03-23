@@ -1,12 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { api } from '@/lib/api-client';
+import { useAuth } from '@/lib/auth';
 
 export default function SettingsPage() {
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user) router.push('/login');
+  }, [isLoading, user, router]);
+
+  if (isLoading) return <div className="flex items-center justify-center min-h-[60vh]">Loading...</div>;
+  if (!user) return null;
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

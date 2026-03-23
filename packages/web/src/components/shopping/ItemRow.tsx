@@ -42,6 +42,9 @@ export function ItemRow({ item, onCompare }: ItemRowProps) {
       <div className="flex items-center gap-3">
         <button
           onClick={handleCheck}
+          role="checkbox"
+          aria-checked={item.checked}
+          aria-label={`Mark ${item.product.name} as ${item.checked ? 'unchecked' : 'checked'}`}
           className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
             item.checked ? 'bg-primary-600 border-primary-600 text-white' : 'border-gray-300 hover:border-primary-400'
           }`}
@@ -65,17 +68,21 @@ export function ItemRow({ item, onCompare }: ItemRowProps) {
           </div>
         </div>
         <div className="flex items-center gap-1 shrink-0">
-          <Button variant="ghost" size="sm" onClick={() => onCompare(item.product.id, item.product.name)}>$</Button>
-          <Button variant="ghost" size="sm" onClick={() => deleteItem.mutate(item.id)}>✕</Button>
+          <Button variant="ghost" size="sm" onClick={() => onCompare(item.product.id, item.product.name)} title="Compare prices">$</Button>
+          <Button variant="ghost" size="sm" onClick={() => { if (confirm(`Remove "${item.product.name}" from list?`)) deleteItem.mutate(item.id); }}>✕</Button>
         </div>
       </div>
       {showPriceInput && (
-        <div className="flex items-end gap-2 ml-8">
+        <div className="flex flex-col gap-2 ml-8">
+          <p className="text-xs text-gray-500">Record the price you paid (optional):</p>
+          <div className="flex items-end gap-2">
           <div className="space-y-1">
             <label className="text-xs text-gray-500">Price</label>
             <input
               type="number"
               step="0.01"
+              min="0"
+              max="99999"
               placeholder="$0.00"
               value={price}
               onChange={e => setPrice(e.target.value)}
@@ -96,6 +103,7 @@ export function ItemRow({ item, onCompare }: ItemRowProps) {
           )}
           <Button size="sm" onClick={submitCheck}>Done</Button>
           <Button variant="ghost" size="sm" onClick={() => setShowPriceInput(false)}>Skip</Button>
+          </div>
         </div>
       )}
     </div>

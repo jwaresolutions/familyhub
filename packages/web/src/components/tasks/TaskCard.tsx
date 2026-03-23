@@ -36,12 +36,10 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
           <p className="font-medium text-sm leading-snug">{task.title}</p>
           <div className="flex flex-wrap gap-1">
             <Badge label={CATEGORY_LABELS[task.category] || task.category} color={CATEGORY_COLORS[task.category]} />
-            {task.priority !== 'MEDIUM' && (
-              <Badge
-                label={PRIORITY_LABELS[task.priority] || task.priority}
-                color={task.priority === 'URGENT' ? '#EF4444' : task.priority === 'HIGH' ? '#F59E0B' : '#6B7280'}
-              />
-            )}
+            <Badge
+              label={PRIORITY_LABELS[task.priority] || task.priority}
+              color={task.priority === 'URGENT' ? '#EF4444' : task.priority === 'HIGH' ? '#F59E0B' : task.priority === 'MEDIUM' ? '#3B82F6' : '#6B7280'}
+            />
           </div>
           {task.dueDate && (
             <p className="text-xs text-gray-500">

@@ -1,0 +1,22 @@
+{
+  "id": 12,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "ItemRow checkbox has no role=\"checkbox\" or aria-checked",
+  "description": "ItemRow checkbox has no role=\"checkbox\" or aria-checked",
+  "status": "done",
+  "priority": "medium",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["accessibility", "shopping"],
+  "personas": ["Linda"],
+  "files": ["packages/web/src/components/shopping/ItemRow.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Should-fix, accessibility requirement"},
+    "Dev Lead": {"verdict": "approve", "notes": "Add role and aria-checked, 2 attrs"},
+    "Security": {"verdict": "approve", "notes": ""},
+    "Android Expert": {"verdict": "approve", "notes": "TalkBack also reads as just button"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

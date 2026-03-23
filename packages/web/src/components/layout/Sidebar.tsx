@@ -24,7 +24,7 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex md:w-64 md:flex-col md:border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-screen sticky top-0">
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-xl font-bold text-primary-600">Organize</h1>
+        <h1 className="text-xl font-bold text-primary-600">FamilyHub</h1>
       </div>
       <nav className="flex-1 p-3 space-y-1">
         {items.map(item => {

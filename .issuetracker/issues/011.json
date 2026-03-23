@@ -1,0 +1,22 @@
+{
+  "id": 11,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Dark mode flash-of-light-theme on page load",
+  "description": "Dark mode flash-of-light-theme on page load",
+  "status": "open",
+  "priority": "medium",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "visual"],
+  "personas": ["Mike"],
+  "files": ["packages/web/src/hooks/useDarkMode.ts"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "defer", "notes": "Needs SSR-level fix"},
+    "Dev Lead": {"verdict": "reject", "notes": "Needs script in head before hydrate"},
+    "Security": {"verdict": null, "notes": ""},
+    "Android Expert": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

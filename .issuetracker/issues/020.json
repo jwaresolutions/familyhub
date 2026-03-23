@@ -1,0 +1,22 @@
+{
+  "id": 20,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Price input has no min validation — can enter negative/huge values",
+  "description": "Price input has no min validation — can enter negative/huge values",
+  "status": "done",
+  "priority": "medium",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["security", "shopping", "validation"],
+  "personas": [],
+  "files": ["packages/web/src/components/shopping/ItemRow.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": null, "notes": ""},
+    "Dev Lead": {"verdict": null, "notes": ""},
+    "Security": {"verdict": "approve", "notes": "Add min=0 to price input"},
+    "Android Expert": {"verdict": "approve", "notes": "Android keyboard should show numeric-only"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

@@ -1,0 +1,22 @@
+{
+  "id": 14,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Sidebar/MobileNav Unicode box-drawing icons render inconsistently",
+  "description": "Sidebar/MobileNav Unicode box-drawing icons render inconsistently",
+  "status": "closed",
+  "priority": "medium",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "visual", "accessibility"],
+  "personas": ["Linda"],
+  "files": ["packages/web/src/components/layout/Sidebar.tsx", "packages/web/src/components/layout/MobileNav.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "defer", "notes": "Needs icon library"},
+    "Dev Lead": {"verdict": "reject", "notes": "Need icon library dependency, scope too large"},
+    "Security": {"verdict": null, "notes": ""},
+    "Android Expert": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

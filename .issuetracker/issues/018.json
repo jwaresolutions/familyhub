@@ -1,0 +1,22 @@
+{
+  "id": 18,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Modal has no overflow-y-auto — long content overflows viewport",
+  "description": "Modal has no overflow-y-auto — long content overflows viewport",
+  "status": "done",
+  "priority": "low",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "mobile"],
+  "personas": ["Linda"],
+  "files": ["packages/web/src/components/ui/Modal.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Should-fix, one CSS class"},
+    "Dev Lead": {"verdict": "approve", "notes": "Add overflow-y-auto max-h-[90vh], 1 line"},
+    "Security": {"verdict": "approve", "notes": "CSS-only change"},
+    "Android Expert": {"verdict": "approve", "notes": "On-screen keyboard cuts off modal content"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

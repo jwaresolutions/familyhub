@@ -80,7 +80,12 @@ export function EventForm({ event, defaultDate, onClose }: EventFormProps) {
   }
 
   async function handleDelete() {
-    if (event && confirm('Delete this event?')) {
+    if (!event) return;
+    const isRecurring = !!event.recurrenceRule || !!event.parentEventId;
+    const message = isRecurring
+      ? 'This is a recurring event. Delete ALL occurrences in the series?'
+      : 'Delete this event?';
+    if (confirm(message)) {
       await deleteEvent.mutateAsync({ id: event.id, scope: 'all' });
       onClose();
     }

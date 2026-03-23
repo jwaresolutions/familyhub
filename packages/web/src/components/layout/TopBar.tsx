@@ -12,7 +12,7 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-800 md:px-6">
       <div className="md:hidden">
-        <h1 className="text-lg font-bold text-primary-600">Organize</h1>
+        <h1 className="text-lg font-bold text-primary-600">FamilyHub</h1>
       </div>
       <div className="flex-1" />
       <div className="flex items-center gap-2">

@@ -1,0 +1,22 @@
+{
+  "id": 19,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "\"$\" button on ItemRow has no label/tooltip",
+  "description": "\"$\" button on ItemRow has no label/tooltip",
+  "status": "done",
+  "priority": "low",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "accessibility", "shopping"],
+  "personas": ["Linda"],
+  "files": ["packages/web/src/components/shopping/ItemRow.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Should-fix, one-line"},
+    "Dev Lead": {"verdict": "approve", "notes": "Add title attribute, 1 line"},
+    "Security": {"verdict": "approve", "notes": ""},
+    "Android Expert": {"verdict": "approve", "notes": "Android content descriptions require meaningful labels"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

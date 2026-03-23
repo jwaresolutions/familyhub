@@ -1,10 +1,6 @@
 {
   "name": "Organize",
-  "nextIssueId": 2,
+  "nextIssueId": 21,
   "nextProjectId": 1,
-  "reviewers": [
-    "PM",
-    "Dev Lead",
-    "Security"
-  ]
+  "reviewers": ["PM", "Dev Lead", "Security", "Android Expert"]
 }

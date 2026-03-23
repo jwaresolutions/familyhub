@@ -1,0 +1,22 @@
+{
+  "id": 17,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "App name inconsistency: \"Organize\" vs \"FamilyHub\"",
+  "description": "App name inconsistency: \"Organize\" vs \"FamilyHub\"",
+  "status": "done",
+  "priority": "low",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "branding"],
+  "personas": ["Linda"],
+  "files": ["packages/web/src/components/layout/Sidebar.tsx", "packages/web/src/components/layout/TopBar.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Should-fix, trivial"},
+    "Dev Lead": {"verdict": "approve", "notes": "Change to FamilyHub, 2 lines"},
+    "Security": {"verdict": "approve", "notes": ""},
+    "Android Expert": {"verdict": "approve", "notes": "PWA shows FamilyHub but app shows Organize"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

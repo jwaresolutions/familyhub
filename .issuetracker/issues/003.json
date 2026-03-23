@@ -1,0 +1,22 @@
+{
+  "id": 3,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Delete Item has no confirmation",
+  "description": "Delete Item has no confirmation",
+  "status": "done",
+  "priority": "high",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "data-safety"],
+  "personas": ["Sarah"],
+  "files": ["packages/web/src/components/shopping/ItemRow.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Should-fix, high frequency action"},
+    "Dev Lead": {"verdict": "approve", "notes": "Add confirm() before deleteItem.mutate(). 1 line."},
+    "Security": {"verdict": "approve", "notes": "Prevents accidental data loss"},
+    "Android Expert": {"verdict": "approve", "notes": "Android convention is Snackbar with Undo"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

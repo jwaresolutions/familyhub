@@ -1,0 +1,22 @@
+{
+  "id": 5,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Recurring event delete hardcoded to scope='all'",
+  "description": "Recurring event delete hardcoded to scope='all'",
+  "status": "done",
+  "priority": "high",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "data-safety", "calendar"],
+  "personas": ["Linda"],
+  "files": ["packages/web/src/components/calendar/EventForm.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Must-fix, users expect to delete one occurrence"},
+    "Dev Lead": {"verdict": "approve", "notes": "Added clear warning in confirm message"},
+    "Security": {"verdict": "approve", "notes": "Data loss prevention"},
+    "Android Expert": {"verdict": "approve", "notes": "Google Calendar always asks single/future/all"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

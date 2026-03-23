@@ -1,0 +1,22 @@
+{
+  "id": 8,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "MEDIUM priority badge hidden on task cards",
+  "description": "MEDIUM priority badge hidden on task cards",
+  "status": "done",
+  "priority": "medium",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "tasks"],
+  "personas": ["Mike"],
+  "files": ["packages/web/src/components/tasks/TaskCard.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Should-fix, confusing"},
+    "Dev Lead": {"verdict": "approve", "notes": "Remove condition, 1 line"},
+    "Security": {"verdict": "approve", "notes": ""},
+    "Android Expert": {"verdict": "approve", "notes": "Android task apps always show priority"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

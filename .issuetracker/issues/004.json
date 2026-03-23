@@ -1,0 +1,22 @@
+{
+  "id": 4,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Calendar events stored as UTC — times display wrong in non-UTC timezones",
+  "description": "Calendar events stored as UTC — times display wrong in non-UTC timezones",
+  "status": "open",
+  "priority": "high",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["bug", "calendar"],
+  "personas": ["Mike"],
+  "files": ["packages/web/src/components/calendar/EventForm.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "defer", "notes": "Needs timezone-aware date handling throughout"},
+    "Dev Lead": {"verdict": "reject", "notes": "Needs new date utility functions, beyond 20 lines"},
+    "Security": {"verdict": null, "notes": ""},
+    "Android Expert": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

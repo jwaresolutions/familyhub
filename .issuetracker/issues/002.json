@@ -1,0 +1,22 @@
+{
+  "id": 2,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Delete List has no confirmation dialog",
+  "description": "Delete List has no confirmation dialog",
+  "status": "done",
+  "priority": "high",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "data-safety"],
+  "personas": ["Sarah"],
+  "files": ["packages/web/src/components/shopping/ShoppingListView.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Must-fix, every user hits this"},
+    "Dev Lead": {"verdict": "approve", "notes": "Add confirm() before deleteList.mutate(). 1 line."},
+    "Security": {"verdict": "approve", "notes": "Prevents accidental data loss"},
+    "Android Expert": {"verdict": "approve", "notes": "Android Material Design requires confirmation for destructive actions"}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

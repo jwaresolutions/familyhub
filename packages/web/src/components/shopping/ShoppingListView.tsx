@@ -119,7 +119,7 @@ export function ShoppingListView() {
               <h2 className="text-lg font-semibold">{selectedList.name}</h2>
               <div className="flex gap-2">
                 <Button variant="ghost" size="sm" onClick={() => setShowAddItem(true)}>+ Add Item</Button>
-                <Button variant="danger" size="sm" onClick={() => { deleteList.mutate(selectedListId!); setSelectedListId(null); }}>Delete List</Button>
+                <Button variant="danger" size="sm" onClick={() => { if (confirm('Delete this list and all its items?')) { deleteList.mutate(selectedListId!); setSelectedListId(null); } }}>Delete List</Button>
               </div>
             </div>
 

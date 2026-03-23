@@ -1,0 +1,22 @@
+{
+  "id": 16,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "MobileNav labels abbreviated inconsistently vs Sidebar",
+  "description": "MobileNav labels abbreviated inconsistently vs Sidebar",
+  "status": "closed",
+  "priority": "low",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "mobile"],
+  "personas": ["Sarah"],
+  "files": ["packages/web/src/components/layout/MobileNav.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "defer", "notes": "Nice-to-have, space constrained"},
+    "Dev Lead": {"verdict": "reject", "notes": "Deliberate design choice"},
+    "Security": {"verdict": null, "notes": ""},
+    "Android Expert": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

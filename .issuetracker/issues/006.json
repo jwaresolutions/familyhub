@@ -1,0 +1,22 @@
+{
+  "id": 6,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "Settings page has no auth guard",
+  "description": "Settings page has no auth guard",
+  "status": "done",
+  "priority": "high",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["security", "bug"],
+  "personas": ["Sarah"],
+  "files": ["packages/web/src/app/settings/page.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "approve", "notes": "Must-fix, security gap"},
+    "Dev Lead": {"verdict": "approve", "notes": "Copy auth pattern from other pages, ~5 lines"},
+    "Security": {"verdict": "approve", "notes": "BLOCK until fixed — security vulnerability"},
+    "Android Expert": {"verdict": "approve", "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}

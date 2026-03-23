@@ -1,0 +1,22 @@
+{
+  "id": 7,
+  "createdAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-22T00:00:00Z",
+  "title": "No assignee selector when creating a task",
+  "description": "No assignee selector when creating a task",
+  "status": "open",
+  "priority": "medium",
+  "projectId": null,
+  "cycle": 1,
+  "labels": ["ux", "tasks"],
+  "personas": ["Mike"],
+  "files": ["packages/web/src/components/tasks/TaskForm.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {"verdict": "defer", "notes": "Should-fix, two-step workflow is annoying but not blocking"},
+    "Dev Lead": {"verdict": "defer", "notes": "May exceed 20 lines"},
+    "Security": {"verdict": null, "notes": ""},
+    "Android Expert": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""}
+}
