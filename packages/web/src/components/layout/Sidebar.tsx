@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/auth';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: '◻' },
@@ -11,8 +12,13 @@ const navItems = [
   { href: '/transit', label: 'Transit', icon: '◈' },
 ];
 
+const adminItem = { href: '/admin', label: 'Admin', icon: '⚙' };
+
 export function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const items = user?.role === 'admin' ? [...navItems, adminItem] : navItems;
 
   return (
     <aside className="hidden md:flex md:w-64 md:flex-col md:border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 h-screen sticky top-0">
@@ -20,7 +26,7 @@ export function Sidebar() {
         <h1 className="text-xl font-bold text-primary-600">Organize</h1>
       </div>
       <nav className="flex-1 p-3 space-y-1">
-        {navItems.map(item => {
+        {items.map(item => {
           const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
           return (
             <Link

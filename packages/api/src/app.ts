@@ -11,6 +11,7 @@ import './modules/calendar/calendar.router';
 import './modules/shopping/shopping.router';
 import './modules/transit/transit.router';
 import authRouter from './modules/users/auth.router';
+import adminRouter from './modules/users/admin.router';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 // Protected routes
 const protectedRouter = express.Router();
 protectedRouter.use(authMiddleware);
+protectedRouter.use('/admin', adminRouter);
 mountModules(protectedRouter);
 protectedRouter.get('/modules', (_req, res) => res.json(getModules()));
 app.use('/api/v1', protectedRouter);

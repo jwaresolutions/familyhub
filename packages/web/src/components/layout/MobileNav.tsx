@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/auth';
 
 const navItems = [
   { href: '/', label: 'Home', icon: '◻' },
@@ -11,12 +12,17 @@ const navItems = [
   { href: '/transit', label: 'Bus', icon: '◈' },
 ];
 
+const adminItem = { href: '/admin', label: 'Admin', icon: '⚙' };
+
 export function MobileNav() {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const items = user?.role === 'admin' ? [...navItems, adminItem] : navItems;
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-gray-200 bg-white py-2 dark:border-gray-700 dark:bg-gray-800 md:hidden">
-      {navItems.map(item => {
+      {items.map(item => {
         const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
         return (
           <Link
