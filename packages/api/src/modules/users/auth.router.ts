@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { prisma } from '../../db/client';
 import { signToken, signRefreshToken, authMiddleware, AuthRequest } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
-import { loginSchema } from '@organize/shared';
+import { loginSchema, changePasswordSchema } from '@organize/shared';
 
 const router = Router();
 
@@ -45,6 +45,19 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res, next) => {
     });
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);
+  } catch (err) { next(err); }
+});
+
+router.patch('/password', authMiddleware, validate(changePasswordSchema), async (req: AuthRequest, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await prisma.user.findUnique({ where: { id: req.userId } });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    const valid = await bcrypt.compare(currentPassword, user.password);
+    if (!valid) return res.status(400).json({ error: 'Current password is incorrect' });
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({ where: { id: req.userId }, data: { password: hashed } });
+    res.json({ message: 'Password updated' });
   } catch (err) { next(err); }
 });
 

@@ -13,12 +13,13 @@ const navItems = [
 ];
 
 const adminItem = { href: '/admin', label: 'Admin', icon: '⚙' };
+const settingsItem = { href: '/settings', label: 'Settings', icon: '◎' };
 
 export function MobileNav() {
   const pathname = usePathname();
   const { user } = useAuth();
 
-  const items = user?.role === 'admin' ? [...navItems, adminItem] : navItems;
+  const items = user?.role === 'admin' ? [...navItems, adminItem, settingsItem] : [...navItems, settingsItem];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-gray-200 bg-white py-2 dark:border-gray-700 dark:bg-gray-800 md:hidden">

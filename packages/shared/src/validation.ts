@@ -65,6 +65,12 @@ export const createStoreSchema = z.object({
   name: z.string().min(1).max(100),
 });
 
+// User
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1).max(100),
+  newPassword: z.string().min(8).max(100),
+});
+
 // Transit
 export const createSavedStopSchema = z.object({
   stopId: z.string().min(1),
