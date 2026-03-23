@@ -7,13 +7,13 @@ import { TopBar } from '@/components/layout/TopBar';
 import { MobileNav } from '@/components/layout/MobileNav';
 
 export const metadata: Metadata = {
-  title: 'Organize',
+  title: 'FamilyHub',
   description: 'Family life management',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Organize',
+    title: 'FamilyHub',
   },
 };
 
