@@ -186,6 +186,7 @@ export function KanbanBoard() {
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="text-sm text-gray-500 truncate">{task.title}</span>
                   <Badge label={CATEGORY_LABELS[task.category] || task.category} color={CATEGORY_COLORS[task.category]} />
+                  <span className="text-xs text-gray-400 shrink-0">{new Date(task.updatedAt).toLocaleDateString()}</span>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button
