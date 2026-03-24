@@ -41,9 +41,25 @@ export function EventForm({ event, defaultDate, onClose }: EventFormProps) {
   const [startTime, setStartTime] = useState(
     event ? event.startTime.split('T')[1]?.slice(0, 5) || '09:00' : '09:00'
   );
-  const [endTime, setEndTime] = useState(
-    event ? event.endTime.split('T')[1]?.slice(0, 5) || '10:00' : '10:00'
-  );
+  const [duration, setDuration] = useState(() => {
+    if (event) {
+      const start = event.startTime.split('T')[1]?.slice(0, 5) || '09:00';
+      const end = event.endTime.split('T')[1]?.slice(0, 5) || '09:30';
+      const [sh, sm] = start.split(':').map(Number);
+      const [eh, em] = end.split(':').map(Number);
+      const diff = (eh * 60 + em) - (sh * 60 + sm);
+      return diff > 0 ? diff : 30;
+    }
+    return 30;
+  });
+
+  const computedEndTime = (() => {
+    const [h, m] = startTime.split(':').map(Number);
+    const totalMin = h * 60 + m + duration;
+    const endH = Math.floor(totalMin / 60) % 24;
+    const endM = totalMin % 60;
+    return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
+  })();
   const [allDay, setAllDay] = useState(event?.allDay || false);
   const [userId, setUserId] = useState(event?.userId || user?.id || '');
   const [recurrence, setRecurrence] = useState(event?.recurrenceRule || '');
@@ -53,7 +69,7 @@ export function EventForm({ event, defaultDate, onClose }: EventFormProps) {
     if (!title.trim()) return;
 
     const startISO = allDay ? `${date}T00:00:00.000Z` : `${date}T${startTime}:00.000Z`;
-    const endISO = allDay ? `${date}T23:59:59.000Z` : `${date}T${endTime}:00.000Z`;
+    const endISO = allDay ? `${date}T23:59:59.000Z` : `${date}T${computedEndTime}:00.000Z`;
 
     if (isEditing) {
       await updateEvent.mutateAsync({
@@ -120,9 +136,31 @@ export function EventForm({ event, defaultDate, onClose }: EventFormProps) {
           <label htmlFor="allDay" className="text-sm text-gray-700 dark:text-gray-300">All day</label>
         </div>
         {!allDay && (
-          <div className="grid grid-cols-2 gap-3">
-            <Input label="Start" type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
-            <Input label="End" type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <Input label="Start" type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+              <div className="space-y-1">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Duration</label>
+                <select
+                  value={duration}
+                  onChange={e => setDuration(Number(e.target.value))}
+                  className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+                >
+                  <option value={15}>15 min</option>
+                  <option value={30}>30 min</option>
+                  <option value={45}>45 min</option>
+                  <option value={60}>1 hour</option>
+                  <option value={90}>1.5 hours</option>
+                  <option value={120}>2 hours</option>
+                  <option value={180}>3 hours</option>
+                  <option value={240}>4 hours</option>
+                  <option value={480}>8 hours</option>
+                </select>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">
+              Ends at {computedEndTime}
+            </p>
           </div>
         )}
         <Select
