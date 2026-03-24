@@ -184,7 +184,7 @@ export function KanbanBoard() {
                 className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg"
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="text-sm text-gray-500 line-through truncate">{task.title}</span>
+                  <span className="text-sm text-gray-500 truncate">{task.title}</span>
                   <Badge label={CATEGORY_LABELS[task.category] || task.category} color={CATEGORY_COLORS[task.category]} />
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
