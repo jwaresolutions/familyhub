@@ -57,7 +57,6 @@ export const shoppingService = {
         product: true,
         itemStores: { include: { store: true } },
         requestedBy: { select: { id: true, name: true } },
-        approvedBy: { select: { id: true, name: true } },
       },
       orderBy: [{ checked: 'asc' }, { position: 'asc' }],
     });
@@ -72,10 +71,7 @@ export const shoppingService = {
       checked: i.checked,
       position: i.position,
       stores: i.itemStores.map(is => is.store),
-      approvalStatus: i.approvalStatus,
-      requestedBy: i.requestedBy,
-      approvedBy: i.approvedBy,
-      rejectionReason: i.rejectionReason,
+      addedBy: i.requestedBy,
       createdAt: i.createdAt.toISOString(),
       updatedAt: i.updatedAt.toISOString(),
     }));
@@ -102,10 +98,6 @@ export const shoppingService = {
     });
     const position = (maxPos._max.position ?? -1) + 1;
 
-    // Check user role for auto-approval
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
-    const isAdmin = user?.role === 'admin';
-
     const item = await prisma.shoppingItem.create({
       data: {
         shoppingListId: listId,
@@ -115,8 +107,6 @@ export const shoppingService = {
         notes: data.notes,
         position,
         requestedById: userId,
-        approvalStatus: isAdmin ? 'APPROVED' : 'PENDING',
-        approvedById: isAdmin ? userId : undefined,
         itemStores: data.storeIds?.length
           ? { create: data.storeIds.map(storeId => ({ storeId })) }
           : undefined,
@@ -125,7 +115,6 @@ export const shoppingService = {
         product: true,
         itemStores: { include: { store: true } },
         requestedBy: { select: { id: true, name: true } },
-        approvedBy: { select: { id: true, name: true } },
       },
     });
 
@@ -133,6 +122,8 @@ export const shoppingService = {
       ...item,
       stores: item.itemStores.map(is => is.store),
       itemStores: undefined,
+      addedBy: item.requestedBy,
+      requestedBy: undefined,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };
@@ -151,47 +142,12 @@ export const shoppingService = {
         product: true,
         itemStores: { include: { store: true } },
         requestedBy: { select: { id: true, name: true } },
-        approvedBy: { select: { id: true, name: true } },
       },
     });
   },
 
   async deleteItem(id: string) {
     return prisma.shoppingItem.delete({ where: { id } });
-  },
-
-  async approveItem(itemId: string, adminUserId: string) {
-    return prisma.shoppingItem.update({
-      where: { id: itemId },
-      data: {
-        approvalStatus: 'APPROVED',
-        approvedById: adminUserId,
-        rejectionReason: null,
-      },
-      include: {
-        product: true,
-        itemStores: { include: { store: true } },
-        requestedBy: { select: { id: true, name: true } },
-        approvedBy: { select: { id: true, name: true } },
-      },
-    });
-  },
-
-  async rejectItem(itemId: string, adminUserId: string, reason: string) {
-    return prisma.shoppingItem.update({
-      where: { id: itemId },
-      data: {
-        approvalStatus: 'REJECTED',
-        approvedById: adminUserId,
-        rejectionReason: reason,
-      },
-      include: {
-        product: true,
-        itemStores: { include: { store: true } },
-        requestedBy: { select: { id: true, name: true } },
-        approvedBy: { select: { id: true, name: true } },
-      },
-    });
   },
 
   async checkItem(itemId: string, userId: string, data: { price?: number; storeId?: string }) {

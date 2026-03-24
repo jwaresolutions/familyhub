@@ -4,7 +4,7 @@ import { registerModule } from '../../lib/module-registry';
 import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
 import { requireAdmin } from '../../middleware/require-admin';
-import { createShoppingListSchema, createShoppingItemSchema, checkItemSchema, createStoreSchema, approveItemSchema, rejectItemSchema } from '@organize/shared';
+import { createShoppingListSchema, createShoppingItemSchema, checkItemSchema, createStoreSchema } from '@organize/shared';
 
 const router = Router();
 
@@ -61,20 +61,6 @@ router.post('/lists/:id/items', validate(createShoppingItemSchema), async (req: 
   try {
     const item = await shoppingService.addItem(req.params.id, req.body, req.userId!);
     res.status(201).json(item);
-  } catch (err) { next(err); }
-});
-
-router.post('/items/:id/approve', requireAdmin, async (req: AuthRequest, res: Response, next: NextFunction) => {
-  try {
-    const item = await shoppingService.approveItem(req.params.id, req.userId!);
-    res.json(item);
-  } catch (err) { next(err); }
-});
-
-router.post('/items/:id/reject', requireAdmin, validate(rejectItemSchema), async (req: AuthRequest, res: Response, next: NextFunction) => {
-  try {
-    const item = await shoppingService.rejectItem(req.params.id, req.userId!, req.body.reason);
-    res.json(item);
   } catch (err) { next(err); }
 });
 

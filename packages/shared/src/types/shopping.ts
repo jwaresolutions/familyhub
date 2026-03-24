@@ -29,10 +29,7 @@ export interface ShoppingItem {
   checked: boolean;
   position: number;
   stores: Store[];
-  approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED';
-  requestedBy?: { id: string; name: string } | null;
-  approvedBy?: { id: string; name: string } | null;
-  rejectionReason?: string | null;
+  addedBy?: { id: string; name: string } | null;
   createdAt: string;
   updatedAt: string;
 }

@@ -24,7 +24,6 @@ model User {
   shoppingChecks  ShoppingCheck[]
   savedStops      SavedStop[]
   requestedItems  ShoppingItem[] @relation("itemRequester")
-  approvedItems   ShoppingItem[] @relation("itemApprover")
 }
 
 model Task {
@@ -106,12 +105,6 @@ model Product {
   prices PriceRecord[]
 }
 
-enum ApprovalStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
 model ShoppingItem {
   id             String         @id @default(cuid())
   shoppingList   ShoppingList   @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
@@ -122,12 +115,8 @@ model ShoppingItem {
   unit           String?
   notes          String?
   checked        Boolean        @default(false)
-  approvalStatus ApprovalStatus @default(PENDING)
   requestedBy    User?          @relation("itemRequester", fields: [requestedById], references: [id])
   requestedById  String?
-  approvedBy     User?          @relation("itemApprover", fields: [approvedById], references: [id])
-  approvedById   String?
-  rejectionReason String?
   position       Int
   itemStores     ItemStore[]
   checks         ShoppingCheck[]
