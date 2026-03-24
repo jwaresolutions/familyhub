@@ -11,9 +11,10 @@ import type { Task } from '@organize/shared';
 interface TaskCardProps {
   task: Task;
   onClick: () => void;
+  onComplete?: () => void;
 }
 
-export function TaskCard({ task, onClick }: TaskCardProps) {
+export function TaskCard({ task, onClick, onComplete }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task.id,
     data: { task },
@@ -51,6 +52,17 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
               {task.assignees.map(a => (
                 <Avatar key={a.id} name={a.name} color={a.color} size="sm" />
               ))}
+            </div>
+          )}
+          {onComplete && (
+            <div className="flex justify-end pt-1">
+              <button
+                onClick={(e) => { e.stopPropagation(); onComplete(); }}
+                className="text-xs text-gray-400 hover:text-green-600 transition-colors"
+                title="Mark as done"
+              >
+                Done ✓
+              </button>
             </div>
           )}
         </div>

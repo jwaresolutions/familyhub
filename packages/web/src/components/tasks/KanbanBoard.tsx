@@ -16,18 +16,21 @@ import { KanbanColumn } from './KanbanColumn';
 import { TaskCard } from './TaskCard';
 import { TaskForm } from './TaskForm';
 import { useTasks, useMoveTask } from '@/hooks/useTasks';
-import { TASK_STATUS_ORDER, TASK_STATUS_LABELS, CATEGORY_LABELS } from '@organize/shared';
+import { TASK_STATUS_ORDER, TASK_STATUS_LABELS, CATEGORY_LABELS, CATEGORY_COLORS } from '@organize/shared';
 import { useUsers } from '@/hooks/useUsers';
 import { Button } from '@/components/ui/Button';
 import { Select } from '@/components/ui/Select';
+import { Badge } from '@/components/ui/Badge';
 import type { Task } from '@organize/shared';
+
+const BOARD_STATUSES = ['TODO', 'IN_PROGRESS'] as const;
 
 export function KanbanBoard() {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [assigneeFilter, setAssigneeFilter] = useState('');
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showCreate, setShowCreate] = useState(false);
-  const [createStatus, setCreateStatus] = useState('BACKLOG');
+  const [createStatus, setCreateStatus] = useState('TODO');
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const { data: tasks = [], isLoading } = useTasks({
@@ -44,7 +47,7 @@ export function KanbanBoard() {
 
   const columns = useMemo(() => {
     const grouped: Record<string, Task[]> = {};
-    for (const status of TASK_STATUS_ORDER) {
+    for (const status of BOARD_STATUSES) {
       grouped[status] = [];
     }
     for (const task of tasks) {
@@ -52,11 +55,16 @@ export function KanbanBoard() {
         grouped[task.status].push(task);
       }
     }
-    for (const status of TASK_STATUS_ORDER) {
+    for (const status of BOARD_STATUSES) {
       grouped[status].sort((a, b) => a.position - b.position);
     }
     return grouped;
   }, [tasks]);
+
+  const doneTasks = useMemo(() =>
+    tasks.filter(t => t.status === 'DONE').sort((a, b) => a.position - b.position),
+    [tasks]
+  );
 
   function handleDragStart(event: DragStartEvent) {
     const task = tasks.find(t => t.id === event.active.id);
@@ -75,7 +83,7 @@ export function KanbanBoard() {
     let targetStatus: string;
     let targetPosition: number;
 
-    if ((TASK_STATUS_ORDER as readonly string[]).includes(over.id as string)) {
+    if ((BOARD_STATUSES as readonly string[]).includes(over.id as string)) {
       targetStatus = over.id as string;
       targetPosition = columns[targetStatus].length;
     } else {
@@ -93,6 +101,15 @@ export function KanbanBoard() {
   function openCreate(status: string) {
     setCreateStatus(status);
     setShowCreate(true);
+  }
+
+  function handleComplete(taskId: string) {
+    moveTask.mutate({ id: taskId, status: 'DONE', position: 0 });
+  }
+
+  function handleRestore(taskId: string) {
+    const todoTasks = columns['TODO'] || [];
+    moveTask.mutate({ id: taskId, status: 'TODO', position: todoTasks.length });
   }
 
   if (isLoading) {
@@ -129,13 +146,14 @@ export function KanbanBoard() {
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          {TASK_STATUS_ORDER.map(status => (
+          {BOARD_STATUSES.map(status => (
             <div key={status} className="flex flex-col">
               <KanbanColumn
                 status={status}
                 label={TASK_STATUS_LABELS[status]}
                 tasks={columns[status]}
                 onTaskClick={setSelectedTask}
+                onCompleteTask={handleComplete}
               />
               <Button
                 variant="ghost"
@@ -152,6 +170,44 @@ export function KanbanBoard() {
           </DragOverlay>
         </DndContext>
       </div>
+
+      {/* Completed tasks */}
+      {doneTasks.length > 0 && (
+        <div className="space-y-2">
+          <h3 className="font-semibold text-sm text-gray-700 dark:text-gray-300">
+            Completed ({doneTasks.length})
+          </h3>
+          <div className="space-y-1">
+            {doneTasks.map(task => (
+              <div
+                key={task.id}
+                className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg"
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-sm text-gray-500 line-through truncate">{task.title}</span>
+                  <Badge label={CATEGORY_LABELS[task.category] || task.category} color={CATEGORY_COLORS[task.category]} />
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => handleRestore(task.id)}
+                    className="text-xs text-gray-400 hover:text-primary-600 transition-colors"
+                    title="Move back to To Do"
+                  >
+                    Restore
+                  </button>
+                  <button
+                    onClick={() => setSelectedTask(task)}
+                    className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                    title="Edit task"
+                  >
+                    Edit
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Task detail / create slide-over */}
       {(selectedTask || showCreate) && (
