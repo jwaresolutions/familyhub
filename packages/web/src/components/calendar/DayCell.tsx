@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { isToday, isSameMonth } from 'date-fns';
 import type { CalendarEvent } from '@organize/shared';
 
@@ -12,8 +13,12 @@ interface DayCellProps {
 }
 
 export function DayCell({ date, currentMonth, events, onDayClick, onEventClick }: DayCellProps) {
+  const [expanded, setExpanded] = useState(false);
   const today = isToday(date);
   const inMonth = isSameMonth(date, currentMonth);
+
+  const visibleEvents = expanded ? events : events.slice(0, 3);
+  const hiddenCount = events.length - 3;
 
   return (
     <div
@@ -34,7 +39,7 @@ export function DayCell({ date, currentMonth, events, onDayClick, onEventClick }
         {date.getDate()}
       </span>
       <div className="mt-0.5 space-y-0.5">
-        {events.slice(0, 3).map(event => (
+        {visibleEvents.map(event => (
           <div
             key={event.id}
             className="text-xs truncate rounded px-1 py-0.5 cursor-pointer hover:opacity-80"
@@ -44,8 +49,21 @@ export function DayCell({ date, currentMonth, events, onDayClick, onEventClick }
             {event.title}
           </div>
         ))}
-        {events.length > 3 && (
-          <div className="text-xs text-gray-400 px-1">+{events.length - 3} more</div>
+        {!expanded && hiddenCount > 0 && (
+          <div
+            className="text-xs text-gray-400 px-1 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
+            onClick={e => { e.stopPropagation(); setExpanded(true); }}
+          >
+            +{hiddenCount} more
+          </div>
+        )}
+        {expanded && (
+          <div
+            className="text-xs text-gray-400 px-1 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
+            onClick={e => { e.stopPropagation(); setExpanded(false); }}
+          >
+            Show less
+          </div>
         )}
       </div>
     </div>
