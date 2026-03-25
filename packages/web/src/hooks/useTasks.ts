@@ -1,10 +1,13 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
 import type { Task, CreateTaskRequest } from '@organize/shared';
 
-export function useTasks(filters?: { status?: string; category?: string; assigneeId?: string }) {
+export function useTasks(
+  filters?: { status?: string; category?: string; assigneeId?: string },
+  options?: { refetchInterval?: number }
+) {
   const params = new URLSearchParams();
   if (filters?.status) params.set('status', filters.status);
   if (filters?.category) params.set('category', filters.category);
@@ -14,6 +17,10 @@ export function useTasks(filters?: { status?: string; category?: string; assigne
   return useQuery({
     queryKey: ['tasks', filters],
     queryFn: () => api.get<Task[]>(`/tasks${query ? `?${query}` : ''}`),
+    ...(options?.refetchInterval !== undefined && {
+      refetchInterval: options.refetchInterval,
+      placeholderData: keepPreviousData,
+    }),
   });
 }
 

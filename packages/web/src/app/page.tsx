@@ -381,10 +381,10 @@ export default function Dashboard() {
     return { start: start.toISOString(), end: end.toISOString() };
   }, []);
 
-  const { data: tasks = [] } = useTasks();
-  const { data: events = [] } = useCalendarEvents(today.start, today.end);
-  const { data: lists = [] } = useShoppingLists(false);
-  const { data: stops = [] } = useSavedStops();
+  const { data: tasks = [] } = useTasks(undefined, { refetchInterval: 60_000 });
+  const { data: events = [] } = useCalendarEvents(today.start, today.end, undefined, { refetchInterval: 60_000 });
+  const { data: lists = [] } = useShoppingLists(false, { refetchInterval: 30_000 });
+  const { data: stops = [] } = useSavedStops({ refetchInterval: 15_000 });
 
   if (isLoading) {
     return (

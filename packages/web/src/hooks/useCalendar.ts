@@ -1,10 +1,15 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
 import type { CalendarEvent, CreateEventRequest } from '@organize/shared';
 
-export function useCalendarEvents(start: string, end: string, userId?: string) {
+export function useCalendarEvents(
+  start: string,
+  end: string,
+  userId?: string,
+  options?: { refetchInterval?: number }
+) {
   const params = new URLSearchParams({ start, end });
   if (userId) params.set('userId', userId);
 
@@ -12,6 +17,10 @@ export function useCalendarEvents(start: string, end: string, userId?: string) {
     queryKey: ['calendar', start, end, userId],
     queryFn: () => api.get<CalendarEvent[]>(`/calendar/events?${params}`),
     enabled: !!start && !!end,
+    ...(options?.refetchInterval !== undefined && {
+      refetchInterval: options.refetchInterval,
+      placeholderData: keepPreviousData,
+    }),
   });
 }
 

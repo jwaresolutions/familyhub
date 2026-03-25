@@ -1,14 +1,18 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
 import type { ShoppingList, ShoppingItem, Store, Product, PriceComparison } from '@organize/shared';
 
-export function useShoppingLists(archived?: boolean) {
+export function useShoppingLists(archived?: boolean, options?: { refetchInterval?: number }) {
   const params = archived !== undefined ? `?archived=${archived}` : '';
   return useQuery({
     queryKey: ['shopping-lists', archived],
     queryFn: () => api.get<ShoppingList[]>(`/shopping/lists${params}`),
+    ...(options?.refetchInterval !== undefined && {
+      refetchInterval: options.refetchInterval,
+      placeholderData: keepPreviousData,
+    }),
   });
 }
 
