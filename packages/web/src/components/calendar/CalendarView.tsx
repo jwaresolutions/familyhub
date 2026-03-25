@@ -56,11 +56,11 @@ export function CalendarView() {
     userFilter || undefined
   );
 
-  // Group events by day
+  // Group events by local date — convert UTC ISO string to local calendar day
   const eventsByDay = useMemo(() => {
     const map: Record<string, CalendarEvent[]> = {};
     for (const event of events) {
-      const dayKey = event.startTime.split('T')[0];
+      const dayKey = format(new Date(event.startTime), 'yyyy-MM-dd');
       if (!map[dayKey]) map[dayKey] = [];
       map[dayKey].push(event);
     }

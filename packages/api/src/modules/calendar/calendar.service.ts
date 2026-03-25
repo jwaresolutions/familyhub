@@ -40,7 +40,14 @@ export const calendarService = {
       }
 
       try {
-        const rule = RRule.fromString(event.recurrenceRule);
+        // Set dtstart from the event's stored UTC startTime so occurrences
+        // fire at the correct time-of-day. Without this, RRule.fromString
+        // defaults dtstart to "now", producing wrong occurrence times.
+        const parsedRule = RRule.fromString(event.recurrenceRule);
+        const rule = new RRule({
+          ...parsedRule.options,
+          dtstart: event.startTime,
+        });
         const duration = event.endTime.getTime() - event.startTime.getTime();
         const occurrences = rule.between(startDate, endDate, true);
 

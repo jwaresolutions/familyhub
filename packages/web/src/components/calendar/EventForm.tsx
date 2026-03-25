@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { format } from 'date-fns';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
@@ -35,19 +36,25 @@ export function EventForm({ event, defaultDate, onClose }: EventFormProps) {
 
   const [title, setTitle] = useState(event?.title || '');
   const [description, setDescription] = useState(event?.description || '');
-  const [date, setDate] = useState(
-    event ? event.startTime.split('T')[0] : defaultDate || new Date().toISOString().split('T')[0]
-  );
-  const [startTime, setStartTime] = useState(
-    event ? event.startTime.split('T')[1]?.slice(0, 5) || '09:00' : '09:00'
-  );
+  const [date, setDate] = useState(() => {
+    if (event) {
+      // Convert UTC ISO string to local date for display
+      return format(new Date(event.startTime), 'yyyy-MM-dd');
+    }
+    return defaultDate || format(new Date(), 'yyyy-MM-dd');
+  });
+  const [startTime, setStartTime] = useState(() => {
+    if (event) {
+      // Convert UTC ISO string to local time for display
+      return format(new Date(event.startTime), 'HH:mm');
+    }
+    return '09:00';
+  });
   const [duration, setDuration] = useState(() => {
     if (event) {
-      const start = event.startTime.split('T')[1]?.slice(0, 5) || '09:00';
-      const end = event.endTime.split('T')[1]?.slice(0, 5) || '09:30';
-      const [sh, sm] = start.split(':').map(Number);
-      const [eh, em] = end.split(':').map(Number);
-      const diff = (eh * 60 + em) - (sh * 60 + sm);
+      const startMs = new Date(event.startTime).getTime();
+      const endMs = new Date(event.endTime).getTime();
+      const diff = Math.round((endMs - startMs) / 60000);
       return diff > 0 ? diff : 30;
     }
     return 30;
@@ -68,8 +75,14 @@ export function EventForm({ event, defaultDate, onClose }: EventFormProps) {
     e.preventDefault();
     if (!title.trim()) return;
 
-    const startISO = allDay ? `${date}T00:00:00.000Z` : `${date}T${startTime}:00.000Z`;
-    const endISO = allDay ? `${date}T23:59:59.000Z` : `${date}T${computedEndTime}:00.000Z`;
+    // Construct as local time — new Date() interprets "yyyy-MM-ddTHH:mm" as local,
+    // then .toISOString() converts to UTC for storage. This is the correct boundary.
+    const startISO = allDay
+      ? new Date(`${date}T00:00:00`).toISOString()
+      : new Date(`${date}T${startTime}:00`).toISOString();
+    const endISO = allDay
+      ? new Date(`${date}T23:59:59`).toISOString()
+      : new Date(`${date}T${computedEndTime}:00`).toISOString();
 
     if (isEditing) {
       await updateEvent.mutateAsync({
