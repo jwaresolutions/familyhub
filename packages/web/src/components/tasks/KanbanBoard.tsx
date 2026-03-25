@@ -139,7 +139,7 @@ export function KanbanBoard() {
       </div>
 
       {/* Kanban columns */}
-      <div className="flex gap-4 overflow-x-auto overflow-y-auto pb-4 max-h-[calc(100vh-12rem)] md:max-h-[calc(100vh-8rem)]">
+      <div className="flex flex-col gap-4 md:flex-row md:overflow-x-auto overflow-y-auto pb-4 md:max-h-[calc(100vh-8rem)]">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}

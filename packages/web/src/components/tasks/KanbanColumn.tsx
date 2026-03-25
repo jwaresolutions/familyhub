@@ -17,7 +17,7 @@ export function KanbanColumn({ status, label, tasks, onTaskClick, onCompleteTask
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
   return (
-    <div className="flex flex-col w-72 min-w-[18rem] shrink-0">
+    <div className="flex flex-col w-full md:w-72 md:min-w-[18rem] md:shrink-0">
       <div className="flex items-center justify-between mb-3 px-1">
         <h3 className="font-semibold text-sm text-gray-700 dark:text-gray-300">{label}</h3>
         <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 rounded-full px-2 py-0.5">
