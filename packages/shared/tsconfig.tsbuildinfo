@@ -1,0 +1,1 @@
+{"root":["./src/constants.ts","./src/index.ts","./src/validation.ts","./src/types/calendar.ts","./src/types/index.ts","./src/types/shopping.ts","./src/types/task.ts","./src/types/transit.ts","./src/types/user.ts"],"version":"5.9.3"}

@@ -350,16 +350,6 @@ function PageHeader({
             Install App
           </Button>
         )}
-        <Link
-          href="/kiosk"
-          className="text-xs text-gray-500 hover:text-primary-600 dark:hover:text-primary-400
-                     transition-colors px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800
-                     hidden sm:inline-flex items-center gap-1"
-          aria-label="Open kiosk mode"
-        >
-          <span aria-hidden="true">⊞</span>
-          Kiosk
-        </Link>
       </div>
     </header>
   );
