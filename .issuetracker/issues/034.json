@@ -1,0 +1,21 @@
+{
+  "id": 34,
+  "title": "Dashboard information hierarchy and typography for glanceability",
+  "description": "Redesign dashboard widget content for at-a-glance readability on a wall-mounted tablet:\n- Establish clear visual hierarchy: what's most urgent is most visually prominent\n- Use size, color, and weight to differentiate importance levels\n- Today's events and overdue tasks should be visually dominant\n- Shopping list shows summary (X of Y items), not full list\n- Transit shows next arrival time prominently with route and direction\n\nThis is design-driven work. Olivia Hart (Design Lead) should review the layout before implementation.\n\nAcceptance criteria:\n- Dashboard scans in under 5 seconds from arm's length\n- Visual hierarchy is clear — urgent items stand out\n- Typography is legible at 3-4 feet on a 10-inch tablet",
+  "status": "open",
+  "priority": "medium",
+  "labels": ["feature", "design"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["james-obrien"],
+  "files": ["packages/web/src/app/page.tsx"],
+  "blockedBy": [32],
+  "reviews": {
+    "Dev Lead": {"verdict": null, "notes": ""},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T17:00:00Z"
+}

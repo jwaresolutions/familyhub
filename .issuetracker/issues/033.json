@@ -1,0 +1,21 @@
+{
+  "id": 33,
+  "title": "Dashboard auto-refresh / live updates",
+  "description": "The dashboard should automatically refresh its data without user interaction. This is critical for the wall-mounted tablet use case.\n\nImplementation: Use TanStack Query's refetchInterval option on all dashboard queries. Recommended intervals:\n- Upcoming tasks: 60 seconds\n- Today's events: 60 seconds\n- Shopping list: 30 seconds\n- Transit arrivals: 15 seconds (already may have this in transit module)\n\nAcceptance criteria:\n- Dashboard data refreshes automatically at configured intervals\n- No visible loading flicker during refresh (use keepPreviousData)\n- Refresh intervals are appropriate per data type",
+  "status": "done",
+  "priority": "high",
+  "labels": ["feature"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["james-obrien"],
+  "files": ["packages/web/src/app/page.tsx", "packages/web/src/hooks/"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Clean implementation. refetchInterval passed as hook option. placeholderData prevents flicker. Intervals appropriate per data type."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T16:00:00Z"
+}

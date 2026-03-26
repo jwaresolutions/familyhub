@@ -1,0 +1,33 @@
+{
+  "projectId": "proj_001",
+  "title": "FamilyHub (Organize)",
+  "description": "Codebase audit and enhancement recommendations for a family life management system.",
+  "phase": "active",
+  "pm": "hannah-reeves",
+  "sa": "daniel-kwon",
+  "devLead": "sarah-kim",
+  "team": [
+    {"name": "Priya Sharma", "slug": "priya-sharma", "role": "Senior Dev", "workstream": "WS2-Structural"},
+    {"name": "James O'Brien", "slug": "james-obrien", "role": "Senior Dev", "workstream": "WS3-Dashboard"},
+    {"name": "Nina Petrov", "slug": "nina-petrov", "role": "Mid Dev", "workstream": "WS1-BugFixes"}
+  ],
+  "qa": [
+    {"name": "Victor Santos", "slug": "victor-santos"}
+  ],
+  "techStack": ["TypeScript", "Node.js", "Express", "Prisma", "PostgreSQL", "Next.js 14", "React 18", "Tailwind CSS", "TanStack Query", "Zod", "Docker", "Cloudflare Pages"],
+  "milestones": [
+    {"index": 0, "title": "Infrastructure & Security", "deliverables": [21, 24, 25], "complete": true},
+    {"index": 1, "title": "Bug Fixes & Polish", "deliverables": [27, 28, 29, 30], "complete": true},
+    {"index": 2, "title": "Dashboard Experience", "deliverables": [32, 33, 34, 35, 37], "complete": false},
+    {"index": 3, "title": "Testing & Quality", "deliverables": [22, 23], "complete": false},
+    {"index": 4, "title": "API Polish", "deliverables": [26, 31], "complete": false},
+    {"index": 5, "title": "Customer-Reported Fixes", "deliverables": [36], "complete": false}
+  ],
+  "sprintCount": 3,
+  "currentSprint": 2,
+  "gitStrategy": "feature-branches",
+  "totalTasks": 17,
+  "completedTasks": 12,
+  "startedAt": "2026-03-25T12:00:00Z",
+  "updatedAt": "2026-03-25T17:35:00Z"
+}

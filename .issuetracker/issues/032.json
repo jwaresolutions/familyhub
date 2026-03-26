@@ -1,0 +1,21 @@
+{
+  "id": 32,
+  "title": "Dashboard responsive redesign — three breakpoint layouts",
+  "description": "Redesign the dashboard to support three distinct responsive breakpoints:\n1. Phone (<640px): Single column, stacked widgets, compact\n2. Tablet-in-hand (640-1024px): Two-column grid, medium density\n3. Tablet-on-wall (>1024px): Optimized for reading at arm's length — large typography, high contrast, clear information hierarchy\n\nThe wall-mounted tablet is the north star use case. Widgets should show: upcoming tasks, today's events, shopping list status, next buses.\n\nAcceptance criteria:\n- Dashboard looks good and is usable at all three breakpoints\n- Wall-tablet layout emphasizes glanceability — readable at 3-4 feet\n- Typography scales appropriately per breakpoint",
+  "status": "done",
+  "priority": "high",
+  "labels": ["feature", "design"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["james-obrien"],
+  "files": ["packages/web/src/app/page.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Full dashboard rewrite with three breakpoints. Wall-tablet layout leads with clock, highlights overdue tasks, color-coded user pills. Clean extraction of widget components. TypeScript passes."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T15:30:00Z"
+}

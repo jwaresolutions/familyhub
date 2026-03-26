@@ -1,0 +1,21 @@
+{
+  "id": 25,
+  "title": "Clean shared package build artifacts from source directory",
+  "description": "The @organize/shared package has compiled .js, .d.ts, and .js.map files committed alongside .ts sources in src/. Fix this:\n1. Update tsconfig.json to output to dist/ (verify current config)\n2. Add src/**/*.js, src/**/*.d.ts, src/**/*.js.map to .gitignore\n3. Remove the committed build artifacts from git tracking\n4. Verify build still works: npm run build --workspace=packages/shared\n5. Verify api and web packages still import correctly from shared\n\nAcceptance criteria:\n- No build artifacts in src/ directory\n- Build outputs to dist/ only\n- All packages compile and import correctly",
+  "status": "done",
+  "priority": "medium",
+  "labels": ["infrastructure", "tech-debt"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["james-obrien"],
+  "files": ["packages/shared/tsconfig.json", "packages/shared/package.json", "packages/shared/src/", ".gitignore"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Build artifacts removed from tracking. tsconfig already correct. Clean."},
+    "QA Lead": {"verdict": "approve", "notes": "QA retest: .gitignore patterns added for src/**/*.js, src/**/*.d.ts, src/**/*.js.map. Files confirmed untracked. Build artifacts on disk only from local builds. PASSED."},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T17:30:00Z"
+}

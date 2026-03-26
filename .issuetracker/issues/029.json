@@ -1,0 +1,21 @@
+{
+  "id": 29,
+  "title": "Fix dark mode flash-of-light-theme on page load",
+  "description": "When dark mode is enabled, there's a visible flash of light theme before React hydrates and applies the dark mode class. Fix by injecting a synchronous script in the HTML <head> that reads the dark mode preference from localStorage and applies the class before the browser paints.\n\nAcceptance criteria:\n- No visible flash of light theme when dark mode is enabled\n- Dark mode preference persists across page reloads\n- Works on initial visit (respects system preference if no localStorage value)",
+  "status": "done",
+  "priority": "medium",
+  "labels": ["bug"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["nina-petrov"],
+  "files": ["packages/web/src/app/layout.tsx", "packages/web/src/hooks/useDarkMode.ts"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Clean fix. Blocking script runs before hydration. Uses correct localStorage key."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T14:00:00Z"
+}

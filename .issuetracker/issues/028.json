@@ -1,0 +1,21 @@
+{
+  "id": 28,
+  "title": "Fix kanban board mobile responsive layout",
+  "description": "The kanban board requires horizontal scrolling on mobile devices. On narrow viewports, columns should stack vertically or collapse to a list view instead of forcing horizontal scroll.\n\nAcceptance criteria:\n- Kanban is usable on phone-width viewports without horizontal scroll\n- Columns stack vertically or switch to list view on mobile\n- Drag-and-drop still works on mobile (already implemented with dnd-kit)",
+  "status": "done",
+  "priority": "medium",
+  "labels": ["bug", "improvement"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["nina-petrov"],
+  "files": ["packages/web/src/components/tasks/KanbanBoard.tsx", "packages/web/src/components/tasks/KanbanColumn.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Responsive layout change is clean. Vertical stack on mobile, horizontal on md+. dnd-kit unaffected."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T15:00:00Z"
+}

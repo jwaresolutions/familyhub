@@ -1,0 +1,21 @@
+{
+  "id": 24,
+  "title": "Security hardening — remove JWT fallback, add token expiry, add body size limit",
+  "description": "Three targeted security fixes:\n1. Remove the 'dev-secret' fallback from auth middleware. If JWT_SECRET is not set, the API must fail to start with a clear error.\n2. Add expiresIn: '30d' to jwt.sign() calls for both access and refresh tokens.\n3. Add express.json({ limit: '1mb' }) to prevent payload abuse.\n\nVerify the Docker entrypoint correctly generates and injects JWT_SECRET.\n\nAcceptance criteria:\n- API refuses to start without JWT_SECRET env var\n- Tokens expire after 30 days\n- Request body limited to 1MB\n- Existing Docker deployment still works",
+  "status": "done",
+  "priority": "high",
+  "labels": ["security"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["priya-sharma"],
+  "files": ["packages/api/src/middleware/auth.ts", "packages/api/src/app.ts", "scripts/entrypoint.sh"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Three targeted security fixes verified. JWT_SECRET required, 30d expiry, 1MB body limit. Clean."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T15:00:00Z"
+}

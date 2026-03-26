@@ -1,0 +1,27 @@
+{
+  "id": 27,
+  "title": "Fix calendar timezone handling — UTC storage and display",
+  "description": "Calendar events are stored as UTC DateTime but displayed without timezone conversion, causing times to appear wrong in non-UTC timezones (Seattle is UTC-7/UTC-8).\n\nFix approach:\n1. API: Ensure events are stored with correct UTC conversion. When a user submits '3pm' it should be stored as '3pm in their timezone' converted to UTC.\n2. Frontend: Convert UTC timestamps back to local timezone for display.\n3. Recurring events (rrule): Verify rrule expansion respects timezone. The rrule library supports DTSTART with timezone.\n4. Audit existing events: Check if historical data needs correction.\n\nThis is the highest-complexity fix in the engagement. The recurring event + timezone combination requires careful testing.\n\nAcceptance criteria:\n- Events display at correct local time in Pacific timezone\n- Recurring events expand to correct local times across DST boundaries\n- New events store timezone-aware UTC correctly\n- Existing events verified or migrated",
+  "status": "done",
+  "priority": "high",
+  "labels": ["bug"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["priya-sharma"],
+  "files": [
+    "packages/api/src/modules/calendar/calendar.service.ts",
+    "packages/api/src/modules/calendar/calendar.router.ts",
+    "packages/web/src/components/calendar/EventForm.tsx",
+    "packages/web/src/components/calendar/CalendarView.tsx",
+    "packages/web/src/hooks/useCalendar.ts"
+  ],
+  "blockedBy": [21],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Timezone fix correct. EventForm uses local Date constructor, CalendarView groups by local date, rrule dtstart set from stored UTC. Tests pass."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T16:00:00Z"
+}

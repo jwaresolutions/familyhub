@@ -1,0 +1,21 @@
+{
+  "id": 21,
+  "title": "Set up Vitest testing framework for monorepo",
+  "description": "Configure Vitest for the npm workspace monorepo. Set up vitest.config.ts at root and per-package configs for @organize/api and @organize/shared. Include test scripts in package.json. Verify the framework runs with a trivial passing test in each package.\n\nAcceptance criteria:\n- vitest installed and configured for api and shared packages\n- `npm test` runs tests across all workspaces\n- One passing smoke test per package",
+  "status": "done",
+  "priority": "high",
+  "labels": ["infrastructure", "testing"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["priya-sharma"],
+  "files": ["package.json", "packages/api/package.json", "packages/shared/package.json"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Vitest framework set up correctly. Tests pass. Unblocks API test coverage."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T14:00:00Z"
+}

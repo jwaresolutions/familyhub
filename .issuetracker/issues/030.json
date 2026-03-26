@@ -1,0 +1,21 @@
+{
+  "id": 30,
+  "title": "Fix calendar +N more click handler",
+  "description": "In the calendar month view, when a day has more events than can display, the '+N more' label opens a new event form instead of expanding to show the hidden events. Fix the click handler to show the hidden events in a popover or expanded view.\n\nAcceptance criteria:\n- Clicking '+N more' shows the hidden events for that day\n- Does not open the new event form\n- Hidden events are interactive (clickable to view/edit)",
+  "status": "done",
+  "priority": "medium",
+  "labels": ["bug"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["nina-petrov"],
+  "files": ["packages/web/src/components/calendar/DayCell.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": "approve", "notes": "Clean fix. stopPropagation prevents bubble to onDayClick. Expand/collapse state per cell. All events retain click handlers."},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T16:00:00Z"
+}

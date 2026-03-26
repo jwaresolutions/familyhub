@@ -1,0 +1,21 @@
+{
+  "id": 31,
+  "title": "Add accessibility attributes to calendar day cells",
+  "description": "Calendar day cells lack ARIA roles, labels, and keyboard navigation support. Add:\n- role='gridcell' on day cells\n- aria-label with date and event count\n- Keyboard navigation (arrow keys between days, Enter to select)\n- Focus indicators visible in both light and dark mode\n\nAcceptance criteria:\n- Day cells have appropriate ARIA roles and labels\n- Keyboard navigation works between days\n- Screen reader announces date and event count",
+  "status": "review_pending",
+  "priority": "medium",
+  "labels": ["improvement"],
+  "projectId": 1,
+  "cycle": 1,
+  "personas": ["james-obrien"],
+  "files": ["packages/web/src/components/calendar/DayCell.tsx", "packages/web/src/components/calendar/CalendarView.tsx"],
+  "blockedBy": [],
+  "reviews": {
+    "Dev Lead": {"verdict": null, "notes": ""},
+    "QA Lead": {"verdict": null, "notes": ""},
+    "Customer": {"verdict": null, "notes": ""}
+  },
+  "userVote": {"verdict": null, "notes": ""},
+  "createdAt": "2026-03-25T12:30:00Z",
+  "updatedAt": "2026-03-25T17:50:00Z"
+}

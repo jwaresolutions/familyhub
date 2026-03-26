@@ -1,0 +1,72 @@
+{
+  "projectId": "proj_001",
+  "assessedBy": "daniel-kwon",
+  "assessedAt": "2026-03-25T12:30:00Z",
+  "risks": [
+    {
+      "id": "risk_001",
+      "title": "Timezone fix may require data migration for existing recurring events",
+      "description": "Calendar events are stored as UTC DateTime via Prisma. Recurring events use rrule strings. If existing events were created with implicit timezone assumptions (e.g., user entered 3pm PST but it was stored as 3pm UTC), fixing the display layer alone won't correct historical data. The scope expands if we need to retroactively adjust stored timestamps.",
+      "category": "technical",
+      "likelihood": "medium",
+      "impact": "medium",
+      "mitigation": "Audit existing calendar data volume before implementation. If fewer than ~20 events exist, manual verification is feasible. If more, build a migration script with dry-run mode.",
+      "owner": "daniel-kwon",
+      "status": "open",
+      "relatedIssues": [27],
+      "identifiedAt": "2026-03-25T12:30:00Z"
+    },
+    {
+      "id": "risk_002",
+      "title": "Zero test coverage means any fix carries implicit regression risk",
+      "description": "The codebase has no automated tests — no unit, integration, or end-to-end tests. Every change made during this engagement carries the risk of introducing regressions that won't be caught until a user encounters them. This is the structural risk that underlies every other work item.",
+      "category": "technical",
+      "likelihood": "high",
+      "impact": "medium",
+      "mitigation": "Establish testing framework (Vitest + Playwright) as the first workstream. Write regression tests for each bug fix before or alongside the fix. Prioritize test coverage on calendar and shopping modules where data integrity matters most.",
+      "owner": "marcus-chen",
+      "status": "open",
+      "relatedIssues": [21, 22, 23],
+      "identifiedAt": "2026-03-25T12:30:00Z"
+    },
+    {
+      "id": "risk_003",
+      "title": "Dashboard kiosk UX requires design decisions not yet made",
+      "description": "The wall-mounted tablet dashboard is a distinct UX workstream that requires information hierarchy decisions — what's most important at a glance, how large text needs to be readable at arm's length, whether a dedicated kiosk route or responsive breakpoints are the right approach. These are design decisions that affect implementation scope.",
+      "category": "scope",
+      "likelihood": "medium",
+      "impact": "low",
+      "mitigation": "Involve Olivia Hart (Design Lead) in dashboard layout decisions. Present 2-3 layout options to the customer for feedback before implementation begins. Bound the scope to responsive optimization + auto-refresh, with kiosk mode as an optional add-on.",
+      "owner": "daniel-kwon",
+      "status": "open",
+      "relatedIssues": [32, 33, 34, 35],
+      "identifiedAt": "2026-03-25T12:30:00Z"
+    },
+    {
+      "id": "risk_004",
+      "title": "Shared package build artifacts in source may mask type errors",
+      "description": "The shared package has compiled .js, .d.ts, and .js.map files committed alongside .ts source files in src/. If the build output is stale relative to the source, the API and web packages may be importing outdated types without error, which could mask bugs. Cleaning this up may surface existing type mismatches.",
+      "category": "technical",
+      "likelihood": "low",
+      "impact": "low",
+      "mitigation": "Clean the shared package build output first. Run full type-check across all packages after cleanup. Fix any type errors that surface before proceeding with other work.",
+      "owner": "marcus-chen",
+      "status": "open",
+      "relatedIssues": [25],
+      "identifiedAt": "2026-03-25T12:30:00Z"
+    },
+    {
+      "id": "risk_005",
+      "title": "JWT fallback secret could be active in production",
+      "description": "The auth middleware has `process.env.JWT_SECRET || 'dev-secret'`. If the environment variable is unset or empty in the Docker deployment, all tokens are signed with a known hardcoded value. The Cloudflare Access perimeter mitigates the external risk, but this is a defense-in-depth gap.",
+      "category": "security",
+      "likelihood": "low",
+      "impact": "medium",
+      "mitigation": "Remove the fallback. Make the API fail to start if JWT_SECRET is not set. Verify the Docker entrypoint generates and injects the secret correctly.",
+      "owner": "daniel-kwon",
+      "status": "open",
+      "relatedIssues": [24],
+      "identifiedAt": "2026-03-25T12:30:00Z"
+    }
+  ]
+}
