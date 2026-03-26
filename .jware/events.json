@@ -490,6 +490,157 @@
       "generatedEvents": [],
       "parentEventId": null,
       "depth": 0
+    },
+
+    {
+      "id": "evt_mtg3_act1",
+      "type": "meeting:action-item",
+      "source": "customer-meeting",
+      "target": "olivia-hart",
+      "projectId": "proj_001",
+      "payload": {
+        "meetingFile": ".jware/meetings/2026-03-25-design-spec-review.md",
+        "actionItem": "Finalize full dashboard layout spec: grid system with widget registry and size classes (small/medium/large), all 4 widgets positioned — shopping (large, primary), calendar (medium), transit (small, one bus stop), tasks (small, count per person). Detailed shopping widget treatment: column-flow items, store pills, highlight with left border accent + bold weight, 2px timeout bar. Modular registry pattern for future add/remove/reorder without layout rewrites.",
+        "issueId": 37,
+        "dueDate": null
+      },
+      "priority": "HIGH",
+      "timestamp": "2026-03-25T19:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg3_act2",
+      "type": "meeting:action-item",
+      "source": "customer-meeting",
+      "target": "james-obrien",
+      "projectId": "proj_001",
+      "payload": {
+        "meetingFile": ".jware/meetings/2026-03-25-design-spec-review.md",
+        "actionItem": "Implement #037 to Olivia's finalized dashboard spec — widget registry with size classes, modular grid renderer, shopping widget with filter-highlight pattern",
+        "issueId": 37,
+        "dueDate": null
+      },
+      "priority": "HIGH",
+      "timestamp": "2026-03-25T19:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg3_act3",
+      "type": "meeting:action-item",
+      "source": "customer-meeting",
+      "target": "victor-santos",
+      "projectId": "proj_001",
+      "payload": {
+        "meetingFile": ".jware/meetings/2026-03-25-design-spec-review.md",
+        "actionItem": "QA #037 after James completes implementation — verify filter-highlight interaction, timeout reset behavior, responsive breakpoints, widget registry modularity",
+        "issueId": 37,
+        "dueDate": null
+      },
+      "priority": "NORMAL",
+      "timestamp": "2026-03-25T19:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg3_act4",
+      "type": "meeting:action-item",
+      "source": "customer-meeting",
+      "target": "hannah-reeves",
+      "projectId": "proj_001",
+      "payload": {
+        "meetingFile": ".jware/meetings/2026-03-25-design-spec-review.md",
+        "actionItem": "Notify customer when #037 is ready for review — this is the final task in the engagement",
+        "issueId": 37,
+        "dueDate": null
+      },
+      "priority": "NORMAL",
+      "timestamp": "2026-03-25T19:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg3_verify036",
+      "type": "verdict:received",
+      "source": "customer",
+      "target": null,
+      "projectId": "proj_001",
+      "payload": {
+        "decisionId": 36,
+        "originalQuestion": "Shopping list item edit flow is broken — cannot click items to edit",
+        "verdict": "approve",
+        "customerNotes": "Customer verified fix is working, looks good.",
+        "meetingFile": ".jware/meetings/2026-03-25-design-spec-review.md"
+      },
+      "priority": "HIGH",
+      "timestamp": "2026-03-25T19:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg3_verify032",
+      "type": "verdict:received",
+      "source": "customer",
+      "target": null,
+      "projectId": "proj_001",
+      "payload": {
+        "decisionId": 32,
+        "originalQuestion": "Dashboard responsive redesign — three breakpoint layouts",
+        "verdict": "approve",
+        "customerNotes": "Customer tested on ZFold 7 — breakpoints working correctly. Approved as shipped.",
+        "meetingFile": ".jware/meetings/2026-03-25-design-spec-review.md"
+      },
+      "priority": "HIGH",
+      "timestamp": "2026-03-25T19:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg3_verify034",
+      "type": "verdict:received",
+      "source": "customer",
+      "target": null,
+      "projectId": "proj_001",
+      "payload": {
+        "decisionId": 34,
+        "originalQuestion": "Dashboard information hierarchy and typography for glanceability",
+        "verdict": "approve",
+        "customerNotes": "Approved as shipped alongside #032.",
+        "meetingFile": ".jware/meetings/2026-03-25-design-spec-review.md"
+      },
+      "priority": "HIGH",
+      "timestamp": "2026-03-25T19:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
     }
   ]
 }

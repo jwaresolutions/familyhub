@@ -4,18 +4,18 @@
   "projectPath": "/Users/justinmalone/projects/organize",
   "status": "active",
   "visibility": 2,
-  "phase": "development",
+  "phase": "review",
   "teams": [
     {
       "lead": "Sarah Kim",
       "leadSlug": "sarah-kim",
       "members": [
-        {"name": "James O'Brien", "slug": "james-obrien", "role": "Senior Dev", "workstream": "WS3-Dashboard", "currentTask": null, "completedThisCycle": [26, 25, 31, 34]},
-        {"name": "Priya Sharma", "slug": "priya-sharma", "role": "Senior Dev", "workstream": "WS2-Structural", "currentTask": null, "completedThisCycle": [22]},
-        {"name": "Nina Petrov", "slug": "nina-petrov", "role": "Mid Dev", "workstream": "WS1-BugFixes", "currentTask": null, "completedThisCycle": [23, 36, 35]}
+        {"name": "James O'Brien", "slug": "james-obrien", "role": "Senior Dev", "workstream": "WS3-Dashboard"},
+        {"name": "Priya Sharma", "slug": "priya-sharma", "role": "Senior Dev", "workstream": "WS2-Structural"},
+        {"name": "Nina Petrov", "slug": "nina-petrov", "role": "Mid Dev", "workstream": "WS1-BugFixes"}
       ],
       "qa": [
-        {"name": "Victor Santos", "slug": "victor-santos", "currentTask": null, "completedThisCycle": ["qa-batch-cycle2", "qa-batch-cycle3"]}
+        {"name": "Victor Santos", "slug": "victor-santos"}
       ]
     }
   ],
@@ -26,15 +26,15 @@
   "techStack": ["TypeScript", "Node.js", "Express", "Prisma", "PostgreSQL", "Next.js 14", "React 18", "Tailwind CSS", "TanStack Query", "Zod", "Docker", "Cloudflare Pages"],
   "specialDivisions": [],
   "gitStrategy": "feature-branches",
-  "currentCycle": 3,
-  "completedTasks": 16,
+  "currentCycle": 4,
+  "completedTasks": 17,
   "totalTasks": 17,
   "inProgressTasks": 0,
-  "inReviewTasks": 2,
+  "inReviewTasks": 0,
   "inQATasks": 0,
-  "blockedTasks": 1,
+  "blockedTasks": 0,
   "openTasks": 0,
   "registrySync": true,
   "createdAt": "2026-03-25T12:00:00Z",
-  "updatedAt": "2026-03-25T18:30:00Z"
+  "updatedAt": "2026-03-25T19:45:00Z"
 }

@@ -13,9 +13,9 @@
   "reviews": {
     "Dev Lead": {"verdict": "approve", "notes": "Full dashboard rewrite with three breakpoints. Wall-tablet layout leads with clock, highlights overdue tasks, color-coded user pills. Clean extraction of widget components. TypeScript passes."},
     "QA Lead": {"verdict": null, "notes": ""},
-    "Customer": {"verdict": null, "notes": ""}
+    "Customer": {"verdict": "approve", "notes": "Customer tested on ZFold 7 — two columns unfolded, one column folded, breakpoints working correctly. Approved as shipped (meeting 2026-03-25)."}
   },
-  "userVote": {"verdict": null, "notes": ""},
+  "userVote": {"verdict": "approve", "notes": "Verified on ZFold 7 and 1080p TV via mini computer. Looks good."},
   "createdAt": "2026-03-25T12:30:00Z",
   "updatedAt": "2026-03-25T15:30:00Z"
 }

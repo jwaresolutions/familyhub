@@ -1,21 +1,44 @@
 {
   "id": 37,
   "title": "Dashboard shopping widget: show items with store filter-highlight pattern",
-  "description": "The dashboard shopping list widget currently shows shopping list names instead of their contents. Redesign the widget to show actual items from all shopping lists in a compact multi-column layout with a store filter-highlight interaction.\n\nDesign spec (from customer meeting 2026-03-25 with Olivia Hart):\n\n1. Default state ('All' selected): All items displayed in flowing columns. Pure glance view, no interaction required.\n2. Store pills along the top: One pill per store that exists in the data, plus 'All' as default. Tapping a store highlights items tagged with that store. Unhighlighted items remain at normal appearance (no dimming).\n3. Auto-reset timeout: After 60 seconds of no interaction, filter resets to 'All'. A thin progress bar indicates the timeout — stays full for the first 30 seconds, then shrinks over the remaining 30. No numbers, no pulsing. Any interaction (scroll, tap) resets the timer to full.\n4. Items can be tagged with multiple stores (many-to-many), so grouping by store is not viable — filter-highlight is the correct pattern.\n\nOlivia Hart owns the visual design spec as part of the full dashboard layout pass (#032, #034). James implements to her spec.\n\nAcceptance criteria:\n- Widget shows actual items from all shopping lists in multi-column layout\n- Store filter pills along top, 'All' as default\n- Tapping a store highlights tagged items with clear contrast\n- Auto-reset to 'All' after 60s inactivity with progress bar indicator\n- Progress bar behavior: full for 30s, shrinks over remaining 30s, resets on any interaction\n- No dimming of unmatched items\n- Responsive across three dashboard breakpoints\n- Design spec approved by Olivia Hart before implementation",
-  "status": "open",
+  "description": "The dashboard shopping list widget currently shows shopping list names instead of their contents. Redesign the widget to show actual items from all shopping lists in a compact multi-column layout with a store filter-highlight interaction.\n\nDesign spec (from customer meeting 2026-03-25 with Olivia Hart):\n\n1. Default state ('All' selected): All items displayed in flowing columns. Pure glance view, no interaction required.\n2. Store pills along the top: One pill per store that exists in the data, plus 'All' as default. Tapping a store highlights items tagged with that store. Unhighlighted items remain at normal appearance (no dimming).\n3. Auto-reset timeout: After 60 seconds of no interaction, filter resets to 'All'. A thin progress bar indicates the timeout \u2014 stays full for the first 30 seconds, then shrinks over the remaining 30. No numbers, no pulsing. Any interaction (scroll, tap) resets the timer to full.\n4. Items can be tagged with multiple stores (many-to-many), so grouping by store is not viable \u2014 filter-highlight is the correct pattern.\n\nOlivia Hart owns the visual design spec as part of the full dashboard layout pass (#032, #034). James implements to her spec.\n\nDashboard widget hierarchy (from customer meeting 2026-03-25):\n- Shopping: LARGE \u2014 primary widget, most space, top-left on wall layout\n- Calendar: MEDIUM \u2014 today's/tomorrow's events, design TBD pending data\n- Transit: SMALL \u2014 one bus stop (kids' school commute), compact strip\n- Tasks: SMALL \u2014 count per person only, not full task list\n\nModularity requirement: Widget registry pattern with size class metadata. Grid renderer reads registry. New widgets = component + registry entry. Reordering is a config change, not a layout rewrite. NOT drag-and-drop.\n\nOlivia's design details for shopping widget:\n- Full-width card on dashboard grid (spans both columns on tablet)\n- Store pills: outlined by default, filled on tap. 'All' default is filled.\n- Highlight treatment: left border accent + bolder font weight on matching items\n- Timeout bar: 2px line at widget bottom, same color as active pill\n- Empty state: 'Shopping list is empty' with no store pills\n\nAcceptance criteria:\n- Widget shows actual items from all shopping lists in multi-column layout\n- Store filter pills along top, 'All' as default\n- Tapping a store highlights tagged items with clear contrast\n- Auto-reset to 'All' after 60s inactivity with progress bar indicator\n- Progress bar behavior: full for 30s, shrinks over remaining 30s, resets on any interaction\n- No dimming of unmatched items\n- Responsive across three dashboard breakpoints\n- Design spec approved by Olivia Hart before implementation",
+  "status": "done",
   "priority": "medium",
-  "labels": ["feature", "design", "dashboard"],
+  "labels": [
+    "feature",
+    "design",
+    "dashboard"
+  ],
   "projectId": 1,
   "cycle": 1,
-  "personas": ["olivia-hart", "james-obrien"],
-  "files": ["packages/web/src/app/page.tsx"],
-  "blockedBy": [32],
+  "personas": [
+    "olivia-hart",
+    "james-obrien"
+  ],
+  "files": [
+    "packages/web/src/app/page.tsx"
+  ],
+  "blockedBy": [
+    32
+  ],
   "reviews": {
-    "Dev Lead": {"verdict": null, "notes": ""},
-    "QA Lead": {"verdict": null, "notes": ""},
-    "Customer": {"verdict": null, "notes": ""}
+    "Dev Lead": {
+      "verdict": "approve",
+      "notes": "Sarah Kim approved. All spec criteria met. 3 medium follow-ups noted."
+    },
+    "QA Lead": {
+      "verdict": "approve",
+      "notes": "Static analysis clean. Spec compliance verified."
+    },
+    "Customer": {
+      "verdict": null,
+      "notes": ""
+    }
   },
-  "userVote": {"verdict": null, "notes": ""},
+  "userVote": {
+    "verdict": null,
+    "notes": ""
+  },
   "createdAt": "2026-03-25T14:00:00Z",
-  "updatedAt": "2026-03-25T17:25:00Z"
+  "updatedAt": "2026-03-25T19:45:00Z"
 }

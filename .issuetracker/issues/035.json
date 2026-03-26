@@ -2,7 +2,7 @@
   "id": 35,
   "title": "Dashboard kiosk mode \u2014 fullscreen PWA with no nav chrome",
   "description": "Add an optional kiosk mode for the dashboard, designed for the wall-mounted tablet:\n- Fullscreen layout with no sidebar, topbar, or mobile nav\n- Accessed via a dedicated route (e.g., /dashboard/kiosk) or a toggle\n- Screen-burn prevention: subtle animation or periodic content shift\n- Clock/date display prominent\n- Auto-return to dashboard if navigated away (optional)\n\nThis is an enhancement on top of the responsive dashboard work.\n\nAcceptance criteria:\n- Kiosk mode available via dedicated route or toggle\n- No navigation chrome in kiosk mode\n- Screen-burn prevention active\n- PWA installable in kiosk configuration",
-  "status": "review_pending",
+  "status": "done",
   "priority": "low",
   "labels": [
     "feature"
@@ -21,12 +21,12 @@
   ],
   "reviews": {
     "Dev Lead": {
-      "verdict": null,
-      "notes": ""
+      "verdict": "approve",
+      "notes": "Sarah Kim approved. See review for details."
     },
     "QA Lead": {
-      "verdict": null,
-      "notes": ""
+      "verdict": "approve",
+      "notes": "Victor Santos QA passed (batch cycle 3)."
     },
     "Customer": {
       "verdict": null,
@@ -38,5 +38,5 @@
     "notes": ""
   },
   "createdAt": "2026-03-25T12:30:00Z",
-  "updatedAt": "2026-03-25T18:10:00Z"
+  "updatedAt": "2026-03-25T19:00:00Z"
 }

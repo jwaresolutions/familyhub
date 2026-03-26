@@ -29,13 +29,13 @@
       "notes": "Victor Santos QA passed."
     },
     "Customer": {
-      "verdict": null,
-      "notes": ""
+      "verdict": "approve",
+      "notes": "Customer verified fix is working — edit flow restored, looks good (meeting 2026-03-25)."
     }
   },
   "userVote": {
-    "verdict": null,
-    "notes": ""
+    "verdict": "approve",
+    "notes": "Verified working."
   },
   "createdAt": "2026-03-25T14:00:00Z",
   "updatedAt": "2026-03-25T18:30:00Z"
