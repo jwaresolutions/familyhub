@@ -9,7 +9,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { ArrivalBoard } from '@/components/transit/ArrivalBoard';
 import { ShoppingWidget } from '@/components/dashboard/ShoppingWidget';
-import { getEnabledWidgets, getWidgetColSpan } from '@/components/dashboard/widgetRegistry';
+import { getEnabledWidgets } from '@/components/dashboard/widgetRegistry';
 import { useTasks } from '@/hooks/useTasks';
 import { useCalendarEvents } from '@/hooks/useCalendar';
 import { useSavedStops } from '@/hooks/useTransit';
@@ -392,48 +392,65 @@ interface DashboardData {
   }>;
 }
 
+function renderWidget(widget: ReturnType<typeof getEnabledWidgets>[number], data: DashboardData) {
+  switch (widget.id) {
+    case 'shopping':
+      return <ShoppingWidget />;
+    case 'calendar':
+      return <CalendarWidget events={data.events} />;
+    case 'transit':
+      return <TransitWidget stops={data.stops} />;
+    case 'tasks':
+      return <TasksWidget tasks={data.tasks} />;
+    default:
+      return null;
+  }
+}
+
 function DashboardGrid({ data }: { data: DashboardData }) {
   const widgets = getEnabledWidgets();
 
-  return (
-    <div
-      className="grid grid-cols-1 gap-4
-                 sm:grid-cols-2 sm:gap-5
-                 lg:grid-cols-2 lg:gap-6"
-    >
-      {widgets.map(widget => {
-        const colSpan = getWidgetColSpan(widget.sizeClass);
+  const largeWidgets  = widgets.filter(w => w.sizeClass === 'LARGE');
+  const stackedWidgets = widgets.filter(w => w.sizeClass !== 'LARGE');
 
-        switch (widget.id) {
-          case 'shopping':
-            return (
-              <div key={widget.id} className={colSpan}>
-                <ShoppingWidget />
-              </div>
-            );
-          case 'calendar':
-            return (
-              <div key={widget.id} className={colSpan}>
-                <CalendarWidget events={data.events} />
-              </div>
-            );
-          case 'transit':
-            return (
-              <div key={widget.id} className={colSpan}>
-                <TransitWidget stops={data.stops} />
-              </div>
-            );
-          case 'tasks':
-            return (
-              <div key={widget.id} className={colSpan}>
-                <TasksWidget tasks={data.tasks} />
-              </div>
-            );
-          default:
-            return null;
-        }
-      })}
-    </div>
+  /*
+   * Phone (<640px): single column, all widgets in order (large first, then stacked).
+   * Tablet / wall (sm+): two-column side-by-side flex layout.
+   *   Left column  — LARGE widgets (Shopping), stretched to fill full height.
+   *   Right column — remaining widgets (Transit → Calendar → Tasks) stacked top-to-bottom.
+   */
+  return (
+    <>
+      {/* ── Phone: single column stack ─────────────────────────────── */}
+      <div className="flex flex-col gap-4 sm:hidden">
+        {widgets.map(widget => (
+          <div key={widget.id}>
+            {renderWidget(widget, data)}
+          </div>
+        ))}
+      </div>
+
+      {/* ── Tablet / wall: two-column layout ───────────────────────── */}
+      <div className="hidden sm:flex sm:gap-5 lg:gap-6 sm:items-stretch">
+        {/* Left column — LARGE widgets fill the full height */}
+        <div className="flex flex-col gap-5 lg:gap-6 flex-1 [&>*]:flex-1 [&>*]:flex [&>*]:flex-col">
+          {largeWidgets.map(widget => (
+            <div key={widget.id} className="flex flex-col flex-1 [&>*]:flex-1">
+              {renderWidget(widget, data)}
+            </div>
+          ))}
+        </div>
+
+        {/* Right column — smaller widgets stacked */}
+        <div className="flex flex-col gap-5 lg:gap-6 flex-1">
+          {stackedWidgets.map(widget => (
+            <div key={widget.id}>
+              {renderWidget(widget, data)}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 

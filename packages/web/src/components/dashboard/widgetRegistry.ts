@@ -36,11 +36,13 @@ export interface WidgetDefinition {
 /**
  * Registered widgets ordered by `order` field.
  *
- * Current layout (per customer meeting with Olivia):
- *   Shopping  — LARGE, primary widget, top-left on wall layout
- *   Calendar  — MEDIUM, today's/tomorrow's events
- *   Transit   — SMALL, one bus stop, compact strip
- *   Tasks     — SMALL, count per person only (here: full task list)
+ * Current layout (per customer meeting with Olivia, updated #40):
+ *   Shopping  — LARGE, fills entire left column on tablet/wall
+ *   Transit   — SMALL, top of right column
+ *   Calendar  — MEDIUM, middle of right column (today's events)
+ *   Tasks     — SMALL, bottom of right column (upcoming)
+ *
+ * On phone (<640px) all widgets stack in a single column in order.
  */
 export const WIDGET_REGISTRY: WidgetDefinition[] = [
   {
@@ -51,16 +53,16 @@ export const WIDGET_REGISTRY: WidgetDefinition[] = [
     enabled: true,
   },
   {
-    id: 'calendar',
-    name: 'Calendar',
-    sizeClass: 'MEDIUM',
+    id: 'transit',
+    name: 'Transit',
+    sizeClass: 'SMALL',
     order: 2,
     enabled: true,
   },
   {
-    id: 'transit',
-    name: 'Transit',
-    sizeClass: 'SMALL',
+    id: 'calendar',
+    name: 'Calendar',
+    sizeClass: 'MEDIUM',
     order: 3,
     enabled: true,
   },
