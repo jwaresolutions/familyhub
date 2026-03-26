@@ -641,6 +641,92 @@
       "generatedEvents": [],
       "parentEventId": null,
       "depth": 0
+    },
+
+    {
+      "id": "evt_mtg4_act1",
+      "type": "meeting:action-item",
+      "source": "customer-meeting",
+      "target": "dev-team",
+      "projectId": "proj_001",
+      "payload": {
+        "meetingFile": ".jware/meetings/2026-03-25-ux-testing-deployment-review.md",
+        "actionItem": "Investigate and fix #038 — shopping widget highlight font-weight not visually distinct, border too subtle in dark mode. Requires devtools investigation before any redesign.",
+        "issueId": 38,
+        "dueDate": null
+      },
+      "priority": "NORMAL",
+      "timestamp": "2026-03-25T22:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg4_act2",
+      "type": "meeting:action-item",
+      "source": "customer-meeting",
+      "target": "dev-team",
+      "projectId": "proj_001",
+      "payload": {
+        "meetingFile": ".jware/meetings/2026-03-25-ux-testing-deployment-review.md",
+        "actionItem": "Investigate and fix #039 — shopping widget progress bar stays full width, does not animate shrink despite timer firing correctly. Needs runtime debugging with console logs or devtools.",
+        "issueId": 39,
+        "dueDate": null
+      },
+      "priority": "NORMAL",
+      "timestamp": "2026-03-25T22:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg4_act3",
+      "type": "meeting:action-item",
+      "source": "customer-meeting",
+      "target": "hannah-reeves",
+      "projectId": "proj_001",
+      "payload": {
+        "meetingFile": ".jware/meetings/2026-03-25-ux-testing-deployment-review.md",
+        "actionItem": "Reschedule UX tester session (Darnell, Gloria, Patrice, Tomás, Wendy) after #038 and #039 are fixed and deployment is verified by customer",
+        "issueId": null,
+        "dueDate": null
+      },
+      "priority": "NORMAL",
+      "timestamp": "2026-03-25T22:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
+    },
+    {
+      "id": "evt_mtg4_verify037",
+      "type": "verdict:received",
+      "source": "customer",
+      "target": null,
+      "projectId": "proj_001",
+      "payload": {
+        "decisionId": 37,
+        "originalQuestion": "Dashboard shopping widget: show items with store filter-highlight pattern",
+        "verdict": "approve",
+        "customerNotes": "Core functionality confirmed working — store pills, filtering, multi-column layout, auto-reset. Two bugs filed separately (#038 highlight contrast, #039 progress bar animation).",
+        "meetingFile": ".jware/meetings/2026-03-25-ux-testing-deployment-review.md"
+      },
+      "priority": "HIGH",
+      "timestamp": "2026-03-25T22:00:00Z",
+      "processed": false,
+      "processedAt": null,
+      "processedBy": null,
+      "generatedEvents": [],
+      "parentEventId": null,
+      "depth": 0
     }
   ]
 }

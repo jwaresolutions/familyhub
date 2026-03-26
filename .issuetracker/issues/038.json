@@ -1,0 +1,53 @@
+{
+  "id": 38,
+  "title": "Shopping widget highlight not visually distinct \u2014 font weight not rendering, border too subtle",
+  "description": "When a store pill is tapped on the dashboard shopping widget, matching items should be visually highlighted. The current implementation applies a 3px left border accent and font-semibold to matching items.\n\nObserved behavior (confirmed via screenshots on Mac dark mode):\n- The left border IS rendering but is too subtle \u2014 a thin colored line on a dark card is barely noticeable\n- The font-weight change from font-medium to font-semibold is not visually distinguishable \u2014 customer did not notice any text weight difference\n- Net effect: the only visible change when filtering is a small colored line to the left of matching items, which is insufficient contrast for a glance-view dashboard\n\nRoot cause investigation needed:\n1. Confirm whether font-semibold is actually being applied in the browser (inspect computed styles via devtools)\n2. If it IS applied, the font may not have a visible difference between medium and semibold weights at that size\n3. If it is NOT applied, check if Tailwind is purging the class in the production build\n\nDo not redesign the highlight treatment until the root cause is understood. Fix the bugs first, then assess whether the current spec (border + bold) is sufficient or needs revision.\n\nAcceptance criteria:\n- Investigate and document root cause of font-weight not being visually distinct\n- Fix whatever is preventing the highlight from being clearly visible\n- Highlighted items must be obviously distinguishable from non-highlighted items in dark mode at normal viewing distance\n- Olivia Hart to reassess visual treatment after bug fix if current spec still insufficient",
+  "status": "done",
+  "priority": "medium",
+  "labels": [
+    "bug",
+    "design",
+    "dashboard"
+  ],
+  "projectId": 1,
+  "cycle": null,
+  "personas": [
+    "james-obrien"
+  ],
+  "files": [
+    "packages/web/src/components/dashboard/ShoppingWidget.tsx"
+  ],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Dev Lead": {
+      "verdict": "approve",
+      "notes": "James diagnosed and fixed both root causes. Clean."
+    },
+    "Security": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Android Expert": {
+      "verdict": null,
+      "notes": ""
+    },
+    "QA Lead": {
+      "verdict": "approve",
+      "notes": "Fix verified via code review."
+    },
+    "Customer": {
+      "verdict": null,
+      "notes": ""
+    }
+  },
+  "userVote": {
+    "verdict": null,
+    "notes": ""
+  },
+  "createdAt": "2026-03-25T22:00:00Z",
+  "updatedAt": "2026-03-25T22:15:00Z"
+}
