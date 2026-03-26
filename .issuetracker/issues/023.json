@@ -2,20 +2,44 @@
   "id": 23,
   "title": "Set up Playwright for critical frontend flow tests",
   "description": "Configure Playwright for the @organize/web package. Write end-to-end tests for 2-3 critical user flows:\n- Login flow (enter credentials, reach dashboard)\n- Create a task (open form, fill fields, submit, verify on board)\n- Create a calendar event (open form, fill fields, submit, verify on calendar)\n\nAcceptance criteria:\n- Playwright installed and configured\n- 3 passing E2E tests for critical flows\n- Test script added to package.json",
-  "status": "review_pending",
+  "status": "done",
   "priority": "medium",
-  "labels": ["testing"],
+  "labels": [
+    "testing"
+  ],
   "projectId": 1,
   "cycle": 1,
-  "personas": ["nina-petrov"],
-  "files": ["packages/web/playwright.config.ts", "packages/web/e2e/login.spec.ts", "packages/web/e2e/tasks.spec.ts", "packages/web/e2e/calendar.spec.ts", "packages/web/e2e/helpers.ts"],
-  "blockedBy": [21],
+  "personas": [
+    "nina-petrov"
+  ],
+  "files": [
+    "packages/web/playwright.config.ts",
+    "packages/web/e2e/login.spec.ts",
+    "packages/web/e2e/tasks.spec.ts",
+    "packages/web/e2e/calendar.spec.ts",
+    "packages/web/e2e/helpers.ts"
+  ],
+  "blockedBy": [
+    21
+  ],
   "reviews": {
-    "Dev Lead": {"verdict": null, "notes": ""},
-    "QA Lead": {"verdict": null, "notes": ""},
-    "Customer": {"verdict": null, "notes": ""}
+    "Dev Lead": {
+      "verdict": "approve",
+      "notes": "Sarah Kim approved after test:e2e script fix."
+    },
+    "QA Lead": {
+      "verdict": "approve",
+      "notes": "Victor Santos QA passed."
+    },
+    "Customer": {
+      "verdict": null,
+      "notes": ""
+    }
   },
-  "userVote": {"verdict": null, "notes": ""},
+  "userVote": {
+    "verdict": null,
+    "notes": ""
+  },
   "createdAt": "2026-03-25T12:30:00Z",
-  "updatedAt": "2026-03-25T17:30:00Z"
+  "updatedAt": "2026-03-25T18:30:00Z"
 }

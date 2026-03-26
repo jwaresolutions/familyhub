@@ -1,21 +1,42 @@
 {
   "id": 36,
-  "title": "Shopping list item edit flow is broken — cannot click items to edit",
-  "description": "Regression: clicking on a shopping list item no longer opens an edit view. This affects all edit functionality including store tagging, item modifications, etc. The edit flow is broken everywhere — not just on the dashboard, but on the full shopping page as well.\n\nRoot cause investigation needed. Customer identified two commits that may be involved:\n1. b663d0a — Replaced approval workflow (4 buttons: approve, deny, compare, delete) with simple 'Added by' tracking (2 buttons: compare, delete). This was intentional simplification but should not have affected the edit entry point.\n2. A separate commit that made a default shopping list show on the dashboard — may have changed how item components render.\n\nThe edit flow itself likely still exists — the entry point (click handler on item row) was lost or overridden during one of these changes.\n\nAcceptance criteria:\n- Clicking a shopping list item opens the edit view\n- All item edit functionality restored (store tagging, item details, etc.)\n- Edit works on both the shopping page and any embedded views\n- No regression to the 'Added by' tracking or compare/delete buttons",
-  "status": "review_pending",
+  "title": "Shopping list item edit flow is broken \u2014 cannot click items to edit",
+  "description": "Regression: clicking on a shopping list item no longer opens an edit view. This affects all edit functionality including store tagging, item modifications, etc. The edit flow is broken everywhere \u2014 not just on the dashboard, but on the full shopping page as well.\n\nRoot cause investigation needed. Customer identified two commits that may be involved:\n1. b663d0a \u2014 Replaced approval workflow (4 buttons: approve, deny, compare, delete) with simple 'Added by' tracking (2 buttons: compare, delete). This was intentional simplification but should not have affected the edit entry point.\n2. A separate commit that made a default shopping list show on the dashboard \u2014 may have changed how item components render.\n\nThe edit flow itself likely still exists \u2014 the entry point (click handler on item row) was lost or overridden during one of these changes.\n\nAcceptance criteria:\n- Clicking a shopping list item opens the edit view\n- All item edit functionality restored (store tagging, item details, etc.)\n- Edit works on both the shopping page and any embedded views\n- No regression to the 'Added by' tracking or compare/delete buttons",
+  "status": "done",
   "priority": "high",
-  "labels": ["bug", "regression"],
+  "labels": [
+    "bug",
+    "regression"
+  ],
   "projectId": 1,
   "cycle": 1,
-  "personas": ["nina-petrov"],
-  "files": ["packages/web/src/components/shopping/ItemRow.tsx", "packages/api/src/modules/shopping/shopping.service.ts", "packages/web/src/hooks/useShopping.ts"],
+  "personas": [
+    "nina-petrov"
+  ],
+  "files": [
+    "packages/web/src/components/shopping/ItemRow.tsx",
+    "packages/api/src/modules/shopping/shopping.service.ts",
+    "packages/web/src/hooks/useShopping.ts"
+  ],
   "blockedBy": [],
   "reviews": {
-    "Dev Lead": {"verdict": null, "notes": ""},
-    "QA Lead": {"verdict": null, "notes": ""},
-    "Customer": {"verdict": null, "notes": ""}
+    "Dev Lead": {
+      "verdict": "approve",
+      "notes": "Sarah Kim approved. See review for details."
+    },
+    "QA Lead": {
+      "verdict": "approve",
+      "notes": "Victor Santos QA passed."
+    },
+    "Customer": {
+      "verdict": null,
+      "notes": ""
+    }
   },
-  "userVote": {"verdict": null, "notes": ""},
+  "userVote": {
+    "verdict": null,
+    "notes": ""
+  },
   "createdAt": "2026-03-25T14:00:00Z",
-  "updatedAt": "2026-03-25T17:45:00Z"
+  "updatedAt": "2026-03-25T18:30:00Z"
 }

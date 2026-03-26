@@ -1,21 +1,44 @@
 {
   "id": 22,
   "title": "Write API test coverage for critical paths",
-  "description": "Write integration tests for the API's critical CRUD paths using Vitest. Cover:\n- Auth: login, token validation, rejection of invalid tokens\n- Tasks: create, read, update, delete, assign/unassign\n- Calendar: create event, recurring event expansion, timezone handling\n- Shopping: create list, add items, check/uncheck, price recording\n\nFocus on regression prevention — each test should catch a break in the API contract.\n\nAcceptance criteria:\n- Auth module has 5+ tests covering happy path and error cases\n- Each feature module has CRUD tests\n- Tests run in CI (GitHub Actions)",
-  "status": "review_pending",
+  "description": "Write integration tests for the API's critical CRUD paths using Vitest. Cover:\n- Auth: login, token validation, rejection of invalid tokens\n- Tasks: create, read, update, delete, assign/unassign\n- Calendar: create event, recurring event expansion, timezone handling\n- Shopping: create list, add items, check/uncheck, price recording\n\nFocus on regression prevention \u2014 each test should catch a break in the API contract.\n\nAcceptance criteria:\n- Auth module has 5+ tests covering happy path and error cases\n- Each feature module has CRUD tests\n- Tests run in CI (GitHub Actions)",
+  "status": "done",
   "priority": "high",
-  "labels": ["testing"],
+  "labels": [
+    "testing"
+  ],
   "projectId": 1,
   "cycle": 1,
-  "personas": ["priya-sharma"],
-  "files": ["packages/api/src/__tests__/auth.test.ts", "packages/api/src/__tests__/tasks.test.ts", "packages/api/src/__tests__/calendar.test.ts", "packages/api/src/__tests__/shopping.test.ts"],
-  "blockedBy": [21],
+  "personas": [
+    "priya-sharma"
+  ],
+  "files": [
+    "packages/api/src/__tests__/auth.test.ts",
+    "packages/api/src/__tests__/tasks.test.ts",
+    "packages/api/src/__tests__/calendar.test.ts",
+    "packages/api/src/__tests__/shopping.test.ts"
+  ],
+  "blockedBy": [
+    21
+  ],
   "reviews": {
-    "Dev Lead": {"verdict": null, "notes": ""},
-    "QA Lead": {"verdict": null, "notes": ""},
-    "Customer": {"verdict": null, "notes": ""}
+    "Dev Lead": {
+      "verdict": "approve",
+      "notes": "Sarah Kim approved. See review for details."
+    },
+    "QA Lead": {
+      "verdict": "approve",
+      "notes": "Victor Santos QA passed."
+    },
+    "Customer": {
+      "verdict": null,
+      "notes": ""
+    }
   },
-  "userVote": {"verdict": null, "notes": ""},
+  "userVote": {
+    "verdict": null,
+    "notes": ""
+  },
   "createdAt": "2026-03-25T12:30:00Z",
-  "updatedAt": "2026-03-25T17:30:00Z"
+  "updatedAt": "2026-03-25T18:30:00Z"
 }

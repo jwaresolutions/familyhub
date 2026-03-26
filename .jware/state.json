@@ -10,12 +10,12 @@
       "lead": "Sarah Kim",
       "leadSlug": "sarah-kim",
       "members": [
-        {"name": "James O'Brien", "slug": "james-obrien", "role": "Senior Dev", "workstream": "WS3-Dashboard", "currentTask": null, "completedThisCycle": [26, 25]},
+        {"name": "James O'Brien", "slug": "james-obrien", "role": "Senior Dev", "workstream": "WS3-Dashboard", "currentTask": null, "completedThisCycle": [26, 25, 31, 34]},
         {"name": "Priya Sharma", "slug": "priya-sharma", "role": "Senior Dev", "workstream": "WS2-Structural", "currentTask": null, "completedThisCycle": [22]},
-        {"name": "Nina Petrov", "slug": "nina-petrov", "role": "Mid Dev", "workstream": "WS1-BugFixes", "currentTask": 36, "completedThisCycle": [23]}
+        {"name": "Nina Petrov", "slug": "nina-petrov", "role": "Mid Dev", "workstream": "WS1-BugFixes", "currentTask": null, "completedThisCycle": [23, 36, 35]}
       ],
       "qa": [
-        {"name": "Victor Santos", "slug": "victor-santos", "currentTask": null, "completedThisCycle": ["qa-batch-9tasks"]}
+        {"name": "Victor Santos", "slug": "victor-santos", "currentTask": null, "completedThisCycle": ["qa-batch-cycle2", "qa-batch-cycle3"]}
       ]
     }
   ],
@@ -26,15 +26,15 @@
   "techStack": ["TypeScript", "Node.js", "Express", "Prisma", "PostgreSQL", "Next.js 14", "React 18", "Tailwind CSS", "TanStack Query", "Zod", "Docker", "Cloudflare Pages"],
   "specialDivisions": [],
   "gitStrategy": "feature-branches",
-  "currentCycle": 2,
-  "completedTasks": 12,
+  "currentCycle": 3,
+  "completedTasks": 16,
   "totalTasks": 17,
-  "inProgressTasks": 1,
-  "inReviewTasks": 3,
+  "inProgressTasks": 0,
+  "inReviewTasks": 2,
   "inQATasks": 0,
   "blockedTasks": 1,
-  "openTasks": 3,
+  "openTasks": 0,
   "registrySync": true,
   "createdAt": "2026-03-25T12:00:00Z",
-  "updatedAt": "2026-03-25T17:35:00Z"
+  "updatedAt": "2026-03-25T18:30:00Z"
 }

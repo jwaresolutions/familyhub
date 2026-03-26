@@ -2,20 +2,41 @@
   "id": 26,
   "title": "Standardize API error response format across all modules",
   "description": "API error responses are inconsistent across modules. Standardize to a consistent format:\n{ \"error\": \"Human-readable message\", \"code\": \"MACHINE_READABLE_CODE\" }\n\nAudit all router files and the error middleware. Ensure:\n- All 400/404/409/500 responses follow the same shape\n- Validation errors from Zod include field-level detail\n- The error middleware catches unhandled errors and formats them consistently\n\nAcceptance criteria:\n- All API error responses have consistent shape\n- Zod validation errors include field detail\n- Error middleware is the single formatting point",
-  "status": "review_pending",
+  "status": "done",
   "priority": "medium",
-  "labels": ["improvement"],
+  "labels": [
+    "improvement"
+  ],
   "projectId": 1,
   "cycle": 1,
-  "personas": ["james-obrien"],
-  "files": ["packages/api/src/lib/errors.ts", "packages/api/src/middleware/error.ts", "packages/api/src/middleware/validate.ts", "packages/api/src/modules/"],
+  "personas": [
+    "james-obrien"
+  ],
+  "files": [
+    "packages/api/src/lib/errors.ts",
+    "packages/api/src/middleware/error.ts",
+    "packages/api/src/middleware/validate.ts",
+    "packages/api/src/modules/"
+  ],
   "blockedBy": [],
   "reviews": {
-    "Dev Lead": {"verdict": null, "notes": ""},
-    "QA Lead": {"verdict": null, "notes": ""},
-    "Customer": {"verdict": null, "notes": ""}
+    "Dev Lead": {
+      "verdict": "approve",
+      "notes": "Sarah Kim approved. See review for details."
+    },
+    "QA Lead": {
+      "verdict": "approve",
+      "notes": "Victor Santos QA passed."
+    },
+    "Customer": {
+      "verdict": null,
+      "notes": ""
+    }
   },
-  "userVote": {"verdict": null, "notes": ""},
+  "userVote": {
+    "verdict": null,
+    "notes": ""
+  },
   "createdAt": "2026-03-25T12:30:00Z",
-  "updatedAt": "2026-03-25T17:30:00Z"
+  "updatedAt": "2026-03-25T18:30:00Z"
 }
