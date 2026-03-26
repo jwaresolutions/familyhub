@@ -18,17 +18,17 @@ import Link from 'next/link';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatDueDate(dateStr: string): { label: string; urgent: boolean } {
+function formatDueDate(dateStr: string): { label: string; urgent: boolean; overdue: boolean } {
   const due = new Date(dateStr);
   const now = new Date();
   const diffMs = due.getTime() - now.getTime();
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays < 0) return { label: 'Overdue', urgent: true };
-  if (diffDays === 0) return { label: 'Today', urgent: true };
-  if (diffDays === 1) return { label: 'Tomorrow', urgent: true };
-  if (diffDays <= 7) return { label: `${diffDays}d`, urgent: false };
-  return { label: due.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), urgent: false };
+  if (diffDays < 0) return { label: 'Overdue', urgent: true, overdue: true };
+  if (diffDays === 0) return { label: 'Today', urgent: true, overdue: false };
+  if (diffDays === 1) return { label: 'Tomorrow', urgent: true, overdue: false };
+  if (diffDays <= 7) return { label: `${diffDays}d`, urgent: false, overdue: false };
+  return { label: due.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }), urgent: false, overdue: false };
 }
 
 function formatEventTime(event: { startTime: string; allDay: boolean }): string {
@@ -86,26 +86,53 @@ function TasksWidget({ tasks }: { tasks: ReturnType<typeof useTasks>['data'] }) 
       {list.length === 0 ? (
         <p className="text-sm text-gray-500 lg:text-base">No pending tasks</p>
       ) : (
-        <ol className="space-y-2 lg:space-y-4">
+        <ol className="space-y-2 lg:space-y-3">
           {list.map(task => {
             const due = task.dueDate ? formatDueDate(task.dueDate) : null;
+
+            /*
+             * Visual hierarchy tiers at lg: breakpoint:
+             *   overdue  — warm red bg, large bold text, prominent badge
+             *   today    — amber tint, medium-large text
+             *   upcoming — neutral bg, normal weight
+             */
+            const isOverdue = due?.overdue ?? false;
+            const isToday   = due?.urgent && !isOverdue;
+
+            const rowBg = isOverdue
+              ? 'bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800'
+              : isToday
+              ? 'bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800'
+              : 'bg-gray-50 dark:bg-gray-900/40';
+
+            const titleSize = isOverdue
+              ? 'text-sm font-semibold text-red-900 dark:text-red-100 leading-snug lg:text-2xl lg:font-bold'
+              : isToday
+              ? 'text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug lg:text-xl lg:font-semibold'
+              : 'text-sm font-medium text-gray-700 dark:text-gray-300 leading-snug lg:text-lg lg:font-medium';
+
+            const dueBadge = due
+              ? isOverdue
+                ? 'bg-red-600 text-white lg:text-base lg:px-3 lg:py-1 lg:font-bold'
+                : isToday
+                ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 lg:text-sm lg:px-3 lg:py-1'
+                : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 lg:text-sm lg:px-3 lg:py-1'
+              : '';
 
             return (
               <li
                 key={task.id}
-                className={`flex items-start gap-2 rounded-lg p-2 lg:p-3
-                  ${due?.urgent ? 'bg-red-50 dark:bg-red-950/30' : 'bg-gray-50 dark:bg-gray-900/40'}`}
+                className={`flex items-start gap-2 rounded-lg p-2 lg:p-4 ${rowBg}`}
               >
-                {/* Status badge */}
+                {/* Status badge — hidden on phone, visible sm+ */}
                 <Badge
                   label={TASK_STATUS_LABELS[task.status] ?? task.status}
                   color={task.status === 'IN_PROGRESS' ? '#3B82F6' : '#6B7280'}
-                  className="shrink-0 hidden sm:inline-flex"
+                  className="shrink-0 hidden sm:inline-flex lg:mt-0.5"
                 />
 
                 {/* Title */}
-                <span className="flex-1 text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug
-                                 lg:text-xl lg:font-semibold">
+                <span className={`flex-1 ${titleSize}`}>
                   {task.title}
                 </span>
 
@@ -121,18 +148,13 @@ function TasksWidget({ tasks }: { tasks: ReturnType<typeof useTasks>['data'] }) 
                 {/* Due date */}
                 {due && (
                   <span
-                    className={`shrink-0 text-xs font-medium rounded-full px-2 py-0.5
-                                lg:text-sm lg:px-3 lg:py-1
-                                ${due.urgent
-                                  ? 'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300'
-                                  : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
-                                }`}
+                    className={`shrink-0 text-xs font-medium rounded-full px-2 py-0.5 ${dueBadge}`}
                   >
                     {due.label}
                   </span>
                 )}
 
-                {/* Category — visible only lg+ */}
+                {/* Category — wall only */}
                 <Badge
                   label={CATEGORY_LABELS[task.category] ?? task.category}
                   color={CATEGORY_COLORS[task.category]}
@@ -161,9 +183,17 @@ function CalendarWidget({
     userColor: string;
   }>;
 }) {
+  const now = new Date();
+
   const sorted = [...events].sort(
     (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
   );
+
+  // The "current or next" event: either in-progress or the soonest upcoming
+  const currentOrNextIdx = sorted.findIndex(e => {
+    if (e.allDay) return false;
+    return new Date(e.startTime).getTime() >= now.getTime() - 60 * 60 * 1000; // started within last hour
+  });
 
   return (
     <Card className="lg:p-6">
@@ -172,36 +202,59 @@ function CalendarWidget({
       {sorted.length === 0 ? (
         <p className="text-sm text-gray-500 lg:text-base">Nothing scheduled today</p>
       ) : (
-        <ol className="space-y-2 lg:space-y-4">
-          {sorted.slice(0, 6).map(event => (
-            <li key={event.id} className="flex items-center gap-3 lg:gap-4">
-              {/* Color dot / user indicator */}
-              <span
-                className="w-3 h-3 rounded-full shrink-0 lg:w-4 lg:h-4"
-                style={{ backgroundColor: event.userColor }}
-                aria-hidden="true"
-              />
+        <ol className="space-y-2 lg:space-y-3">
+          {sorted.slice(0, 6).map((event, idx) => {
+            const isNext = idx === currentOrNextIdx;
+            const isPast = !event.allDay && new Date(event.startTime).getTime() < now.getTime() - 60 * 60 * 1000;
 
-              {/* Time */}
-              <span className="text-xs text-gray-500 dark:text-gray-400 shrink-0 w-14 lg:w-20 lg:text-base">
-                {formatEventTime(event)}
-              </span>
-
-              {/* Title */}
-              <span className="flex-1 text-sm text-gray-900 dark:text-gray-100 truncate
-                               lg:text-xl lg:font-medium">
-                {event.title}
-              </span>
-
-              {/* Person */}
-              <span
-                className="text-xs font-medium shrink-0 rounded-full px-2 py-0.5 lg:text-sm lg:px-3"
-                style={{ backgroundColor: `${event.userColor}20`, color: event.userColor }}
+            return (
+              <li
+                key={event.id}
+                className={`flex items-center gap-3 lg:gap-4 rounded-lg
+                  ${isNext
+                    ? 'lg:bg-blue-50 lg:dark:bg-blue-950/30 lg:border lg:border-blue-200 lg:dark:border-blue-800 lg:px-3 lg:py-2'
+                    : 'lg:px-1'
+                  }`}
               >
-                {event.userName.split(' ')[0]}
-              </span>
-            </li>
-          ))}
+                {/* Color dot */}
+                <span
+                  className={`rounded-full shrink-0
+                    ${isNext ? 'w-4 h-4 lg:w-5 lg:h-5' : 'w-3 h-3 lg:w-4 lg:h-4'}
+                    ${isPast ? 'opacity-40' : ''}`}
+                  style={{ backgroundColor: event.userColor }}
+                  aria-hidden="true"
+                />
+
+                {/* Time */}
+                <span className={`shrink-0 tabular-nums
+                  ${isNext
+                    ? 'text-xs text-gray-600 dark:text-gray-300 w-14 lg:text-xl lg:font-semibold lg:w-24 lg:text-gray-900 lg:dark:text-gray-100'
+                    : `text-xs w-14 lg:text-base lg:w-20 ${isPast ? 'text-gray-400 dark:text-gray-600' : 'text-gray-500 dark:text-gray-400'}`
+                  }`}>
+                  {formatEventTime(event)}
+                </span>
+
+                {/* Title */}
+                <span className={`flex-1 truncate
+                  ${isNext
+                    ? 'text-sm font-semibold text-gray-900 dark:text-gray-100 lg:text-2xl lg:font-bold'
+                    : `text-sm lg:font-medium ${isPast ? 'text-gray-400 dark:text-gray-500 lg:text-base' : 'text-gray-900 dark:text-gray-100 lg:text-xl'}`
+                  }`}>
+                  {event.title}
+                </span>
+
+                {/* Person chip */}
+                <span
+                  className={`shrink-0 font-medium rounded-full px-2 py-0.5
+                    ${isNext ? 'text-xs lg:text-sm lg:px-3 lg:py-1' : 'text-xs lg:text-sm lg:px-3'}
+                    ${isPast ? 'opacity-40' : ''}`}
+                  style={{ backgroundColor: `${event.userColor}20`, color: event.userColor }}
+                >
+                  {event.userName.split(' ')[0]}
+                </span>
+              </li>
+            );
+          })}
         </ol>
       )}
     </Card>
@@ -358,6 +411,16 @@ function PageHeader({
             Install App
           </Button>
         )}
+        <Link
+          href="/kiosk"
+          className="text-xs text-gray-500 hover:text-primary-600 dark:hover:text-primary-400
+                     transition-colors px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800
+                     hidden sm:inline-flex items-center gap-1"
+          aria-label="Open kiosk mode"
+        >
+          <span aria-hidden="true">⊞</span>
+          Kiosk
+        </Link>
       </div>
     </header>
   );
