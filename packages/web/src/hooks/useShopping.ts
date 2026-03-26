@@ -64,7 +64,7 @@ export function useAddItem() {
 export function useUpdateItem() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...data }: { id: string; quantity?: number; unit?: string; notes?: string; checked?: boolean }) =>
+    mutationFn: ({ id, ...data }: { id: string; quantity?: number; unit?: string; notes?: string; checked?: boolean; storeIds?: string[] }) =>
       api.patch(`/shopping/items/${id}`, data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['shopping-items'] }),
   });

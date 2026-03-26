@@ -135,16 +135,39 @@ export const shoppingService = {
     unit?: string;
     notes?: string;
     checked?: boolean;
+    storeIds?: string[];
   }) {
-    return prisma.shoppingItem.update({
+    const { storeIds, ...scalarData } = data;
+
+    if (storeIds !== undefined) {
+      // Replace store associations atomically
+      await prisma.itemStore.deleteMany({ where: { shoppingItemId: id } });
+      if (storeIds.length > 0) {
+        await prisma.itemStore.createMany({
+          data: storeIds.map(storeId => ({ shoppingItemId: id, storeId })),
+        });
+      }
+    }
+
+    const item = await prisma.shoppingItem.update({
       where: { id },
-      data,
+      data: scalarData,
       include: {
         product: true,
         itemStores: { include: { store: true } },
         requestedBy: { select: { id: true, name: true } },
       },
     });
+
+    return {
+      ...item,
+      stores: item.itemStores.map(is => is.store),
+      itemStores: undefined,
+      addedBy: item.requestedBy,
+      requestedBy: undefined,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
   },
 
   async deleteItem(id: string) {
