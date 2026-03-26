@@ -8,9 +8,10 @@ import { Badge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { ArrivalBoard } from '@/components/transit/ArrivalBoard';
+import { ShoppingWidget } from '@/components/dashboard/ShoppingWidget';
+import { getEnabledWidgets, getWidgetColSpan } from '@/components/dashboard/widgetRegistry';
 import { useTasks } from '@/hooks/useTasks';
 import { useCalendarEvents } from '@/hooks/useCalendar';
-import { useShoppingLists } from '@/hooks/useShopping';
 import { useSavedStops } from '@/hooks/useTransit';
 import { usePWA } from '@/hooks/usePWA';
 import { CATEGORY_LABELS, CATEGORY_COLORS, TASK_STATUS_LABELS } from '@organize/shared';
@@ -261,93 +262,6 @@ function CalendarWidget({
   );
 }
 
-// ─── Shopping widget ──────────────────────────────────────────────────────────
-
-function ShoppingWidget({
-  lists,
-}: {
-  lists: Array<{
-    id: string;
-    name: string;
-    itemCount: number;
-    checkedCount: number;
-    archived: boolean;
-  }>;
-}) {
-  const active = lists.filter(l => !l.archived).slice(0, 4);
-
-  return (
-    <Card className="lg:p-6">
-      <SectionHeader title="Shopping" href="/shopping" linkLabel="View all" />
-
-      {active.length === 0 ? (
-        <p className="text-sm text-gray-500 lg:text-base">No active lists</p>
-      ) : (
-        <ol className="space-y-3 lg:space-y-5">
-          {active.map(list => {
-            const remaining = list.itemCount - list.checkedCount;
-            const pct = list.itemCount > 0
-              ? Math.round((list.checkedCount / list.itemCount) * 100)
-              : 0;
-            const done = list.itemCount > 0 && list.checkedCount === list.itemCount;
-
-            return (
-              <li key={list.id}>
-                {/* List name + summary */}
-                <div className="flex items-baseline justify-between mb-1 lg:mb-2">
-                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100
-                                   lg:text-xl lg:font-semibold">
-                    {list.name}
-                  </span>
-
-                  {/*
-                   * Phone/tablet: "X of Y" fraction
-                   * Wall: "N left" (or "Done") — fewer characters, faster to parse at distance
-                   */}
-                  <span className={`text-xs font-medium lg:hidden
-                    ${done ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
-                    {list.checkedCount} of {list.itemCount}
-                    {done && ' \u2713'}
-                  </span>
-
-                  <span
-                    className={`hidden lg:inline text-base font-semibold tabular-nums
-                      ${done
-                        ? 'text-green-600 dark:text-green-400'
-                        : remaining <= 3
-                        ? 'text-amber-600 dark:text-amber-400'
-                        : 'text-gray-600 dark:text-gray-400'
-                      }`}
-                    aria-label={done ? 'Complete' : `${remaining} items remaining`}
-                  >
-                    {done ? 'Done' : `${remaining} left`}
-                  </span>
-                </div>
-
-                {/* Progress bar — slightly taller on wall for visibility */}
-                <div className="h-2 lg:h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-300"
-                    style={{
-                      width: `${pct}%`,
-                      backgroundColor: done ? '#22c55e' : '#3b82f6',
-                    }}
-                    role="progressbar"
-                    aria-valuenow={pct}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    aria-label={`${list.name}: ${list.checkedCount} of ${list.itemCount} items`}
-                  />
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-      )}
-    </Card>
-  );
-}
-
 // ─── Transit widget ───────────────────────────────────────────────────────────
 
 function TransitWidget({
@@ -451,6 +365,78 @@ function PageHeader({
   );
 }
 
+// ─── Registry-based grid renderer ────────────────────────────────────────────
+
+/**
+ * Renders widget data props that need to be threaded from Dashboard
+ * into non-self-fetching widgets (calendar, tasks, transit).
+ *
+ * ShoppingWidget is self-fetching — it needs no props here.
+ */
+interface DashboardData {
+  tasks: ReturnType<typeof useTasks>['data'];
+  events: Array<{
+    id: string;
+    title: string;
+    startTime: string;
+    allDay: boolean;
+    userName: string;
+    userColor: string;
+  }>;
+  stops: Array<{
+    id: string;
+    stopId: string;
+    stopName: string;
+    nickname?: string;
+    routeIds: string[];
+  }>;
+}
+
+function DashboardGrid({ data }: { data: DashboardData }) {
+  const widgets = getEnabledWidgets();
+
+  return (
+    <div
+      className="grid grid-cols-1 gap-4
+                 sm:grid-cols-2 sm:gap-5
+                 lg:grid-cols-2 lg:gap-6"
+    >
+      {widgets.map(widget => {
+        const colSpan = getWidgetColSpan(widget.sizeClass);
+
+        switch (widget.id) {
+          case 'shopping':
+            return (
+              <div key={widget.id} className={colSpan}>
+                <ShoppingWidget />
+              </div>
+            );
+          case 'calendar':
+            return (
+              <div key={widget.id} className={colSpan}>
+                <CalendarWidget events={data.events} />
+              </div>
+            );
+          case 'transit':
+            return (
+              <div key={widget.id} className={colSpan}>
+                <TransitWidget stops={data.stops} />
+              </div>
+            );
+          case 'tasks':
+            return (
+              <div key={widget.id} className={colSpan}>
+                <TasksWidget tasks={data.tasks} />
+              </div>
+            );
+          default:
+            return null;
+        }
+      })}
+    </div>
+  );
+}
+
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
@@ -471,8 +457,9 @@ export default function Dashboard() {
 
   const { data: tasks = [] } = useTasks(undefined, { refetchInterval: 60_000 });
   const { data: events = [] } = useCalendarEvents(today.start, today.end, undefined, { refetchInterval: 60_000 });
-  const { data: lists = [] } = useShoppingLists(false, { refetchInterval: 30_000 });
   const { data: stops = [] } = useSavedStops({ refetchInterval: 15_000 });
+
+  // Shopping is no longer fetched here — ShoppingWidget is self-fetching.
 
   if (isLoading) {
     return (
@@ -489,6 +476,9 @@ export default function Dashboard() {
      *   phone  (<640px)   — space-y stack, no grid
      *   tablet (640–1024) — sm:grid-cols-2, normal density
      *   wall   (>1024px)  — lg:grid-cols-2, large type, generous padding
+     *
+     * Widget order and sizing is driven by widgetRegistry.ts.
+     * To reorder: change `order` values in the registry. No layout rewrite needed.
      */
     <div className="space-y-4 sm:space-y-6 lg:space-y-8 lg:max-w-none">
       <PageHeader
@@ -498,23 +488,7 @@ export default function Dashboard() {
         install={install}
       />
 
-      <div
-        className="grid grid-cols-1 gap-4
-                   sm:grid-cols-2 sm:gap-5
-                   lg:grid-cols-2 lg:gap-6"
-      >
-        {/*
-         * Widget order is deliberate:
-         *   1. Tasks   — most actionable, top-left on all layouts
-         *   2. Calendar — time-based urgency, top-right
-         *   3. Transit  — time-critical, bottom-left (people need buses now)
-         *   4. Shopping — lower urgency, bottom-right
-         */}
-        <TasksWidget tasks={tasks} />
-        <CalendarWidget events={events} />
-        <TransitWidget stops={stops} />
-        <ShoppingWidget lists={lists} />
-      </div>
+      <DashboardGrid data={{ tasks, events, stops }} />
     </div>
   );
 }
