@@ -1,22 +1,45 @@
 {
   "id": 9,
   "createdAt": "2026-03-22T00:00:00Z",
-  "updatedAt": "2026-03-22T00:00:00Z",
+  "updatedAt": "2026-03-25T22:30:00Z",
   "title": "Calendar \"+N more\" label opens new event instead of showing hidden events",
   "description": "Calendar \"+N more\" label opens new event instead of showing hidden events",
-  "status": "open",
+  "status": "done",
   "priority": "medium",
   "projectId": null,
   "cycle": 1,
-  "labels": ["ux", "calendar"],
-  "personas": ["Mike", "Linda"],
-  "files": ["packages/web/src/components/calendar/DayCell.tsx"],
+  "labels": [
+    "ux",
+    "calendar"
+  ],
+  "personas": [
+    "Mike",
+    "Linda"
+  ],
+  "files": [
+    "packages/web/src/components/calendar/DayCell.tsx"
+  ],
   "blockedBy": [],
   "reviews": {
-    "PM": {"verdict": "defer", "notes": "Needs new UI component"},
-    "Dev Lead": {"verdict": "reject", "notes": "Needs popover/modal, architectural addition"},
-    "Security": {"verdict": null, "notes": ""},
-    "Android Expert": {"verdict": null, "notes": ""}
+    "PM": {
+      "verdict": "defer",
+      "notes": "Needs new UI component"
+    },
+    "Dev Lead": {
+      "verdict": "reject",
+      "notes": "Needs popover/modal, architectural addition"
+    },
+    "Security": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Android Expert": {
+      "verdict": null,
+      "notes": ""
+    }
   },
-  "userVote": {"verdict": null, "notes": ""}
+  "userVote": {
+    "verdict": null,
+    "notes": ""
+  }
 }

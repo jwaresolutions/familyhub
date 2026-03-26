@@ -1,0 +1,49 @@
+{
+  "id": 40,
+  "createdAt": "2026-03-26T06:29:06.441120+00:00",
+  "updatedAt": "2026-03-25T22:35:00Z",
+  "title": "the widgets dont line up in tablet or desktop viewing modes",
+  "description": "this was brought up in the last meeting but i dont remember if there was a ticket cut for the issue.\nto fix this issue just have shopping take up the entire left columb then the right columb should be from top to bottom next busses, today, and upcoming tasks.",
+  "status": "done",
+  "priority": "medium",
+  "projectId": 1,
+  "cycle": null,
+  "labels": [
+    "bug",
+    "dashboard"
+  ],
+  "personas": [
+    "james-obrien"
+  ],
+  "files": [
+    "packages/web/src/app/page.tsx",
+    "packages/web/src/components/dashboard/widgetRegistry.ts"
+  ],
+  "blockedBy": [],
+  "reviews": {
+    "PM": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Dev Lead": {
+      "verdict": "approve",
+      "notes": "Layout fix correct. Two-panel flex, LARGE left, SMALL/MEDIUM right stack."
+    },
+    "Security": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Android Expert": {
+      "verdict": null,
+      "notes": ""
+    },
+    "QA Lead": {
+      "verdict": null,
+      "notes": ""
+    },
+    "Customer": {
+      "verdict": null,
+      "notes": ""
+    }
+  }
+}
