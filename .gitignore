@@ -18,6 +18,11 @@ pgdata/
 .DS_Store
 Thumbs.db
 
+# Shared package build artifacts in src/
+packages/shared/src/**/*.js
+packages/shared/src/**/*.js.map
+packages/shared/src/**/*.d.ts
+
 # Editor
 .vscode/
 .idea/
