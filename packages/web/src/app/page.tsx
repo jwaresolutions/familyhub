@@ -285,6 +285,7 @@ function ShoppingWidget({
       ) : (
         <ol className="space-y-3 lg:space-y-5">
           {active.map(list => {
+            const remaining = list.itemCount - list.checkedCount;
             const pct = list.itemCount > 0
               ? Math.round((list.checkedCount / list.itemCount) * 100)
               : 0;
@@ -292,20 +293,38 @@ function ShoppingWidget({
 
             return (
               <li key={list.id}>
-                {/* List name + count */}
+                {/* List name + summary */}
                 <div className="flex items-baseline justify-between mb-1 lg:mb-2">
                   <span className="text-sm font-medium text-gray-900 dark:text-gray-100
                                    lg:text-xl lg:font-semibold">
                     {list.name}
                   </span>
-                  <span className={`text-xs lg:text-base font-medium
+
+                  {/*
+                   * Phone/tablet: "X of Y" fraction
+                   * Wall: "N left" (or "Done") — fewer characters, faster to parse at distance
+                   */}
+                  <span className={`text-xs font-medium lg:hidden
                     ${done ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>
                     {list.checkedCount} of {list.itemCount}
-                    {done && ' ✓'}
+                    {done && ' \u2713'}
+                  </span>
+
+                  <span
+                    className={`hidden lg:inline text-base font-semibold tabular-nums
+                      ${done
+                        ? 'text-green-600 dark:text-green-400'
+                        : remaining <= 3
+                        ? 'text-amber-600 dark:text-amber-400'
+                        : 'text-gray-600 dark:text-gray-400'
+                      }`}
+                    aria-label={done ? 'Complete' : `${remaining} items remaining`}
+                  >
+                    {done ? 'Done' : `${remaining} left`}
                   </span>
                 </div>
 
-                {/* Progress bar */}
+                {/* Progress bar — slightly taller on wall for visibility */}
                 <div className="h-2 lg:h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-300"
@@ -356,7 +375,13 @@ function TransitWidget({
                             lg:text-sm lg:mb-3">
                 {stop.nickname ?? stop.stopName}
               </p>
-              <ArrivalBoard stopId={stop.stopId} routeIds={stop.routeIds} />
+              {/*
+               * wallMode gives the first arrival a hero treatment (large tabular
+               * time, colored by urgency) while keeping subsequent arrivals in a
+               * compact secondary list. The detail page renders ArrivalBoard
+               * without wallMode so its layout is unaffected.
+               */}
+              <ArrivalBoard stopId={stop.stopId} routeIds={stop.routeIds} wallMode />
             </div>
           ))}
         </div>
