@@ -1,19 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { unauthorized } from '../lib/errors';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
+if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET environment variable is required but not set');
 }
+
+// After the guard above, TypeScript still sees string | undefined across function
+// boundaries — assert it as string so downstream uses compile correctly.
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export interface AuthRequest extends Request {
   userId?: string;
 }
 
-export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
+export function authMiddleware(req: AuthRequest, _res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (!header?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing token' });
+    return next(unauthorized('Missing token', 'MISSING_TOKEN'));
   }
 
   try {
@@ -21,7 +25,7 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
     req.userId = payload.userId;
     next();
   } catch {
-    return res.status(401).json({ error: 'Invalid token' });
+    return next(unauthorized('Invalid token', 'INVALID_TOKEN'));
   }
 }
 

@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { prisma } from '../../db/client';
 import { requireAdmin } from '../../middleware/require-admin';
 import { AuthRequest } from '../../middleware/auth';
+import { badRequest } from '../../lib/errors';
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.post('/users', async (req: AuthRequest, res: Response, next: NextFunction
   try {
     const { username, password, name, color, role } = req.body;
     if (!username || !password || !name || !color) {
-      return res.status(400).json({ error: 'username, password, name, and color are required' });
+      return next(badRequest('username, password, name, and color are required', 'MISSING_FIELDS'));
     }
     const hashed = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
@@ -33,8 +34,8 @@ router.post('/users', async (req: AuthRequest, res: Response, next: NextFunction
       select: { id: true, username: true, name: true, color: true, role: true, avatarUrl: true, createdAt: true, updatedAt: true },
     });
     res.status(201).json(user);
-  } catch (err: any) {
-    if (err.code === 'P2002') return res.status(409).json({ error: 'Username already exists' });
+  } catch (err) {
+    // P2002 (unique constraint) is handled centrally in the error middleware
     next(err);
   }
 });
@@ -62,7 +63,7 @@ router.patch('/users/:id', async (req: AuthRequest, res: Response, next: NextFun
 router.delete('/users/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     if (req.params.id === req.userId) {
-      return res.status(400).json({ error: 'Cannot delete yourself' });
+      return next(badRequest('Cannot delete yourself', 'SELF_DELETE'));
     }
     await prisma.user.delete({ where: { id: req.params.id } });
     res.status(204).end();

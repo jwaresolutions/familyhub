@@ -5,6 +5,7 @@ import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
 import { requireAdmin } from '../../middleware/require-admin';
 import { createEventSchema } from '@organize/shared';
+import { badRequest, notFound } from '../../lib/errors';
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.get('/events', async (req: AuthRequest, res: Response, next: NextFunction
   try {
     const { start, end, userId } = req.query as Record<string, string>;
     if (!start || !end) {
-      return res.status(400).json({ error: 'start and end query params required' });
+      return next(badRequest('start and end query params required', 'MISSING_PARAMS'));
     }
     const events = await calendarService.findInRange(start, end, userId);
     res.json(events);
@@ -24,7 +25,7 @@ router.get('/events', async (req: AuthRequest, res: Response, next: NextFunction
 router.get('/events/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const event = await calendarService.findById(req.params.id);
-    if (!event) return res.status(404).json({ error: 'Event not found' });
+    if (!event) return next(notFound('Event'));
     res.json(event);
   } catch (err) { next(err); }
 });

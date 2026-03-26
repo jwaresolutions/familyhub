@@ -5,6 +5,7 @@ import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
 import { requireAdmin } from '../../middleware/require-admin';
 import { createSavedStopSchema } from '@organize/shared';
+import { notFound } from '../../lib/errors';
 
 const router = Router();
 
@@ -88,7 +89,7 @@ router.get('/search', async (req: AuthRequest, res: Response, next: NextFunction
 router.get('/routes/:routeId', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const route = await transitService.getRoute(req.params.routeId);
-    if (!route) return res.status(404).json({ error: 'Route not found' });
+    if (!route) return next(notFound('Route'));
     res.json(route);
   } catch (err) {
     next(err);

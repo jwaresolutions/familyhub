@@ -5,6 +5,7 @@ import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
 import { requireAdmin } from '../../middleware/require-admin';
 import { createShoppingListSchema, createShoppingItemSchema, checkItemSchema, createStoreSchema } from '@organize/shared';
+import { badRequest, notFound } from '../../lib/errors';
 
 const router = Router();
 
@@ -42,10 +43,7 @@ router.delete('/lists/:id', requireAdmin, async (req: AuthRequest, res: Response
   try {
     await shoppingService.deleteList(req.params.id);
     res.status(204).end();
-  } catch (err: any) {
-    if (err.statusCode) return res.status(err.statusCode).json({ error: err.message });
-    next(err);
-  }
+  } catch (err) { next(err); }
 });
 
 // === ITEMS ===
@@ -114,9 +112,9 @@ router.get('/products/search', async (req: AuthRequest, res: Response, next: Nex
 router.get('/products/compare', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const productId = req.query.productId as string;
-    if (!productId) return res.status(400).json({ error: 'productId required' });
+    if (!productId) return next(badRequest('productId required', 'MISSING_PARAMS'));
     const comparison = await shoppingService.comparePrices(productId);
-    if (!comparison) return res.status(404).json({ error: 'Product not found' });
+    if (!comparison) return next(notFound('Product'));
     res.json(comparison);
   } catch (err) { next(err); }
 });

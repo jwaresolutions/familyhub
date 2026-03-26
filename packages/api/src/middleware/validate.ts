@@ -1,15 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { ZodSchema, ZodError } from 'zod';
+import { ZodSchema } from 'zod';
 
 export function validate(schema: ZodSchema) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     try {
       req.body = schema.parse(req.body);
       next();
     } catch (err) {
-      if (err instanceof ZodError) {
-        return res.status(400).json({ error: 'Validation failed', details: err.errors });
-      }
+      // Pass ZodError to the central error handler, which formats it consistently
       next(err);
     }
   };

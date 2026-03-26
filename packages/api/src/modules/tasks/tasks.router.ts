@@ -5,6 +5,7 @@ import { validate } from '../../middleware/validate';
 import { AuthRequest } from '../../middleware/auth';
 import { requireAdmin } from '../../middleware/require-admin';
 import { createTaskSchema, moveTaskSchema, reorderSchema } from '@organize/shared';
+import { badRequest, notFound } from '../../lib/errors';
 
 const router = Router();
 
@@ -26,7 +27,7 @@ router.get('/', async (req: AuthRequest, res: Response, next: NextFunction) => {
 router.get('/:id', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const task = await tasksService.findById(req.params.id);
-    if (!task) return res.status(404).json({ error: 'Task not found' });
+    if (!task) return next(notFound('Task'));
     res.json({
       ...task,
       assignees: task.assignments.map(a => a.user),
@@ -92,7 +93,7 @@ router.patch('/:id/move', validate(moveTaskSchema), async (req: AuthRequest, res
 router.post('/:id/assign', async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.body;
-    if (!userId) return res.status(400).json({ error: 'userId required' });
+    if (!userId) return next(badRequest('userId required', 'MISSING_FIELDS'));
     const assignment = await tasksService.addAssignee(req.params.id, userId);
     res.status(201).json(assignment);
   } catch (err) { next(err); }

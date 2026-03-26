@@ -1,4 +1,5 @@
 import { prisma } from '../../db/client';
+import { badRequest } from '../../lib/errors';
 
 export const shoppingService = {
   // === LISTS ===
@@ -44,7 +45,7 @@ export const shoppingService = {
   async deleteList(id: string) {
     const list = await prisma.shoppingList.findUnique({ where: { id }, select: { isMain: true } });
     if (list?.isMain) {
-      throw Object.assign(new Error('Cannot delete the main grocery list'), { statusCode: 400 });
+      throw badRequest('Cannot delete the main grocery list', 'PROTECTED_RESOURCE');
     }
     return prisma.shoppingList.delete({ where: { id } });
   },
