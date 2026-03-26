@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { ZodError } from 'zod';
 import { AppError } from '../lib/errors';
 
 export function errorHandler(err: unknown, _req: Request, res: Response, _next: NextFunction) {
@@ -8,12 +7,12 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
     return res.status(err.statusCode).json({ error: err.message, code: err.code });
   }
 
-  // Zod validation error — include field-level detail
-  if (err instanceof ZodError) {
+  // Zod validation error — duck-type check avoids CJS/ESM instanceof mismatch
+  if (isObject(err) && err.name === 'ZodError' && Array.isArray((err as any).errors)) {
     return res.status(400).json({
       error: 'Validation failed',
       code: 'VALIDATION_ERROR',
-      fields: err.errors,
+      fields: (err as any).errors,
     });
   }
 
