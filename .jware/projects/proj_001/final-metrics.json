@@ -1,0 +1,59 @@
+{
+  "projectId": "proj_001",
+  "title": "FamilyHub (Organize)",
+  "startDate": "2026-03-25",
+  "completedDate": "2026-03-26",
+  "durationDays": 1,
+  "totalTasks": 20,
+  "completedTasks": 20,
+  "taskBreakdown": {
+    "infrastructure": 3,
+    "bugFixes": 7,
+    "features": 5,
+    "testing": 2,
+    "apiPolish": 2,
+    "securityRemediation": 1
+  },
+  "tasksByDeveloper": {
+    "priya-sharma": {"assigned": 5, "completed": 5, "tasks": [21, 22, 24, 27, "security-remediation"]},
+    "james-obrien": {"assigned": 9, "completed": 9, "tasks": [25, 26, 31, 32, 33, 34, 37, 38, 40]},
+    "nina-petrov": {"assigned": 6, "completed": 6, "tasks": [23, 28, 29, 30, 35, 36]}
+  },
+  "qaMetrics": {
+    "qaEngineer": "victor-santos",
+    "qaLead": "margaret-chen",
+    "totalQACycles": 3,
+    "tasksQAd": 20,
+    "firstPassRate": 0.95,
+    "defectsFound": 3,
+    "defectsFixed": 3
+  },
+  "reviewMetrics": {
+    "devLead": "sarah-kim",
+    "totalReviews": 20,
+    "approvedFirstPass": 19,
+    "changesRequested": 1,
+    "rejectionRate": 0.05
+  },
+  "securityReview": {
+    "reviewer": "frank-morrison",
+    "criticalFindings": 1,
+    "highFindings": 3,
+    "mediumFindings": 2,
+    "lowFindings": 1,
+    "allCriticalResolved": true,
+    "allHighResolved": true,
+    "clearanceGranted": true
+  },
+  "architectureReview": {
+    "reviewer": "raj-patel",
+    "verdict": "cleared-with-conditions",
+    "conditions": ["Differentiate access/refresh tokens", "Add PATCH validation schemas"],
+    "conditionsBlocking": false
+  },
+  "commits": 20,
+  "filesChanged": 45,
+  "linesAdded": 4200,
+  "testsWritten": 53,
+  "testsPassing": 53
+}
