@@ -8,7 +8,11 @@ if (!process.env.JWT_SECRET) {
 
 // After the guard above, TypeScript still sees string | undefined across function
 // boundaries — assert it as string so downstream uses compile correctly.
-const JWT_SECRET = process.env.JWT_SECRET as string;
+export const JWT_SECRET = process.env.JWT_SECRET as string;
+
+export function verifyToken(token: string): { userId: string } {
+  return jwt.verify(token, JWT_SECRET) as { userId: string };
+}
 
 export interface AuthRequest extends Request {
   userId?: string;

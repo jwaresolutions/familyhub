@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import { prisma } from '../../db/client';
-import { signToken, signRefreshToken, authMiddleware, AuthRequest } from '../../middleware/auth';
+import { signToken, signRefreshToken, authMiddleware, AuthRequest, verifyToken } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { loginSchema, changePasswordSchema } from '@organize/shared';
 import { badRequest, notFound, unauthorized } from '../../lib/errors';
@@ -29,8 +29,7 @@ router.post('/refresh', async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
     if (!refreshToken) return next(badRequest('Missing refresh token', 'MISSING_REFRESH_TOKEN'));
-    const jwt = await import('jsonwebtoken');
-    const payload = jwt.default.verify(refreshToken, process.env.JWT_SECRET || 'dev-secret') as { userId: string };
+    const payload = verifyToken(refreshToken);
     const token = signToken(payload.userId);
     res.json({ token });
   } catch {

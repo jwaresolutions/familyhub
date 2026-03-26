@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import { errorHandler } from './middleware/error';
 import { authMiddleware } from './middleware/auth';
 import { mountModules, getModules } from './lib/module-registry';
@@ -15,11 +17,20 @@ import adminRouter from './modules/users/admin.router';
 
 const app = express();
 
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+// Fail closed: require explicit CORS origin, never fall back to wildcard
+const corsOrigin = process.env.CORS_ORIGIN ?? 'http://localhost:3000';
+app.use(helmet());
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json({ limit: '1mb' }));
 
-// Public routes
-app.use('/api/v1/auth', authRouter);
+const authRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: { error: 'Too many requests', code: 'RATE_LIMITED' },
+});
+
+// Public routes (rate limited)
+app.use('/api/v1/auth', authRateLimiter, authRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
