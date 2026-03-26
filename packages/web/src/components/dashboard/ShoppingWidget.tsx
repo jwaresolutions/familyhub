@@ -105,7 +105,9 @@ function useAutoResetTimer(active: boolean, onReset: () => void) {
       }
 
       if (elapsed < SHRINK_STARTS_AT_MS) {
-        setProgress(1);
+        // Hold phase — bar is full. Only set state once to avoid
+        // flooding React with 60 no-op updates per second.
+        // progress starts at 1 from useState initial value; skip re-setting it.
       } else {
         const shrinkElapsed = elapsed - SHRINK_STARTS_AT_MS;
         const shrinkWindow = RESET_TOTAL_MS - SHRINK_STARTS_AT_MS;
@@ -207,9 +209,9 @@ function ItemRow({
         'sm:text-base',
         'lg:text-lg',
         isAccented
-          ? 'border-l-[3px] border-primary-500 font-semibold text-gray-900 dark:text-gray-100'
-          : 'border-l-[3px] border-transparent',
-        'transition-[border-color,font-weight] duration-150',
+          ? 'border-l-4 border-primary-500 font-bold bg-primary-500/10 text-gray-900 dark:text-gray-50'
+          : 'border-l-4 border-transparent',
+        'transition-[border-color,background-color] duration-150',
       ].join(' ')}
     >
       <span className="flex-1 leading-snug">{item.product.name}</span>
@@ -370,7 +372,7 @@ export function ShoppingWidget() {
             style={{
               width: `${progress * 100}%`,
               backgroundColor: activePillColor,
-              transition: progress === 1 ? 'none' : 'width 100ms linear',
+              transition: 'width 100ms linear',
             }}
             aria-hidden="true"
           />
